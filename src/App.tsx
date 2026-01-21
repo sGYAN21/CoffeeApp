@@ -6,7 +6,6 @@ import AppNavigation from "./navigation/AppNavigation" // Adjust path based on y
 function App(): React.JSX.Element {
   return (
     <SafeAreaProvider>
-    
       <StatusBar barStyle="dark-content" backgroundColor="#F9F9F9" />
       <AppNavigation />
     </SafeAreaProvider>

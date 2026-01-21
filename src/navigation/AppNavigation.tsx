@@ -6,19 +6,23 @@ import { CoffeeItem } from '../constants';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ProductScreen from '../screens/ProductScreen';
+import SignupScreen from '../auth/SignUp/SignUpScreen';
+import SignInScreen from '../auth/SignIn/SignInScreen';
 
 export type RootStackParamList = {
   Home: undefined;
   ProductDetails: { item: CoffeeItem };
 };
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function AppNavigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+         <Stack.Screen name="signup" component={SignupScreen} />
+         <Stack.Screen name="signin" component={SignInScreen} />
         <Stack.Screen name="Home" component={HomeTabs} />
         <Stack.Screen name="ProductDetails" component={ProductScreen} />
       </Stack.Navigator>
