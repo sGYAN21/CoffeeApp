@@ -17,7 +17,7 @@ const CoffeeCard: React.FC<Props> = ({ item }) => {
     // 1. Wrap the whole card in a TouchableOpacity for better UX
     <TouchableOpacity 
       activeOpacity={1} 
-      onPress={() => navigation.navigate('Product', { item })} // Pass as { item: item }
+      onPress={() => navigation.navigate('ProductDetails', { item })} 
       style={styles.cardContainer}
     >
       <View style={styles.cardInner}>
@@ -56,7 +56,7 @@ const CoffeeCard: React.FC<Props> = ({ item }) => {
 const styles = StyleSheet.create({
   cardContainer: {
     width: width * 0.7,
-    height: 420, // Adjusted to prevent excessive whitespace
+    height: 450, 
     alignItems: 'center',
     justifyContent: 'flex-end',
     marginRight: 20,

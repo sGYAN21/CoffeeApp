@@ -14,7 +14,7 @@ const HomeScreen: React.FC = () => {
         source={image} // Update with your actual file name
         style={styles.bgImage}
         resizeMode="cover"
-      ></ImageBackground>
+      />
       {/* Header */}
       <View style={styles.header}>
         <Image source={{ uri: 'https://i.pravatar.cc/100' }} style={styles.avatar} />

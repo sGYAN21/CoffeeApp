@@ -5,10 +5,11 @@ import HomeScreen from '../screens/HomeScreen';
 import { CoffeeItem } from '../constants';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
+import ProductScreen from '../screens/ProductScreen';
 
 export type RootStackParamList = {
   Home: undefined;
-  Details: { item: CoffeeItem };
+  ProductDetails: { item: CoffeeItem };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -19,6 +20,7 @@ export default function AppNavigation() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeTabs} />
+        <Stack.Screen name="ProductDetails" component={ProductScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -28,17 +30,24 @@ function HomeTabs() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarShowLabel: false,
-        tabBarActiveTintColor: "brown",
-        tabBarInactiveTintColor: 'gray',
+        tabBarShowLabel: true,
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: '#EDEDED',
         tabBarStyle: {
-       marginBottom:20,
-       borderRadius:50,
-       backgroundColor: '#C67C4E'
+          backgroundColor: '#C67C4E',
+          height: 64,
+          position: 'absolute',
+          bottom: 25,
+          marginHorizontal: 20,
+          borderRadius: 35,
+          borderTopWidth: 0,
+        },
+        tabBarItemStyle: {
+          height: 64,
+          paddingBottom: 0,
         },
         tabBarIcon: ({ color, size, focused }) => {
           let iconName: string = 'home';
-
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Favourite') {
@@ -46,8 +55,7 @@ function HomeTabs() {
           } else if (route.name === 'Cart') {
             iconName = focused ? 'basket' : 'basket-outline';
           }
-
-          return <Icon name={iconName} size={size} color={color} />;
+          return <Icon name={iconName} size={28} color={color} />;
         },
       })}
     >

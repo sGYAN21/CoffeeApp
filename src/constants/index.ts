@@ -1,10 +1,23 @@
+import { ImageSourcePropType } from 'react-native';
+import affogato from '../assets/coffee/affogato.jpg';
+import americano from '../assets/coffee/americano.jpg';
+import cappuccino from '../assets/coffee/cappuccino.jpg';
+import cold_brew from '../assets/coffee/cold_brew.jpg';
+import espresso from '../assets/coffee/espresso.jpg';
+import flatwhite from '../assets/coffee/flatwhite.jpg';
+import irish from '../assets/coffee/irish.jpg';
+import latte from '../assets/coffee/latte.jpg';
+import macchiato from '../assets/coffee/macchiato.jpg';
+import mocha from '../assets/coffee/mocha.jpg';
+
 export interface CoffeeItem {
   id: number;
   name: string;
   price: string;
   volume: string;
   rating: string;
-  image: string;
+  image: ImageSourcePropType;
+  description: string;
 }
 
 export const theme = {
@@ -24,7 +37,8 @@ export const coffeeItems: CoffeeItem[] = [
     price: '30.00',
     volume: '100 ml',
     rating: '4.0',
-    image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=400&q=80',
+    image: espresso,
+    description: 'A strong and bold shot of pure coffee with a rich aroma and intense flavor.',
   },
   {
     id: 2,
@@ -32,7 +46,8 @@ export const coffeeItems: CoffeeItem[] = [
     price: '35.00',
     volume: '200 ml',
     rating: '4.5',
-    image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=400&q=80',
+    image: latte,
+    description: 'Smooth espresso mixed with steamed milk and topped with a light layer of foam.',
   },
   {
     id: 3,
@@ -40,7 +55,8 @@ export const coffeeItems: CoffeeItem[] = [
     price: '40.00',
     volume: '180 ml',
     rating: '4.6',
-    image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&q=80',
+    image: cappuccino,
+    description: 'A balanced blend of espresso, steamed milk, and thick milk foam.',
   },
   {
     id: 4,
@@ -48,7 +64,8 @@ export const coffeeItems: CoffeeItem[] = [
     price: '28.00',
     volume: '220 ml',
     rating: '4.2',
-    image: 'https://images.unsplash.com/photo-1521302080371-4c6c2d4b2b5b?auto=format&fit=crop&w=400&q=80',
+    image: americano,
+    description: 'Espresso diluted with hot water for a smooth and light coffee experience.',
   },
   {
     id: 5,
@@ -56,7 +73,8 @@ export const coffeeItems: CoffeeItem[] = [
     price: '45.00',
     volume: '200 ml',
     rating: '4.7',
-    image: 'https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?auto=format&fit=crop&w=400&q=80',
+    image: mocha,
+    description: 'A delicious mix of espresso, chocolate syrup, and steamed milk.',
   },
   {
     id: 6,
@@ -64,7 +82,8 @@ export const coffeeItems: CoffeeItem[] = [
     price: '38.00',
     volume: '160 ml',
     rating: '4.3',
-    image: 'https://images.unsplash.com/photo-1523942839745-7848d7c1baf0?auto=format&fit=crop&w=400&q=80',
+    image: flatwhite,
+    description: 'Rich espresso combined with velvety steamed milk and minimal foam.',
   },
   {
     id: 7,
@@ -72,7 +91,8 @@ export const coffeeItems: CoffeeItem[] = [
     price: '32.00',
     volume: '120 ml',
     rating: '4.1',
-    image: 'https://images.unsplash.com/photo-1605478900974-ec4c8b5b3d92?auto=format&fit=crop&w=400&q=80',
+    image: macchiato,
+    description: 'Espresso marked with a small amount of milk foam for a bold taste.',
   },
   {
     id: 8,
@@ -80,7 +100,8 @@ export const coffeeItems: CoffeeItem[] = [
     price: '50.00',
     volume: '250 ml',
     rating: '4.8',
-    image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=400&q=80',
+    image: irish,
+    description: 'Hot coffee blended with Irish whiskey and topped with fresh cream.',
   },
   {
     id: 9,
@@ -88,7 +109,8 @@ export const coffeeItems: CoffeeItem[] = [
     price: '42.00',
     volume: '300 ml',
     rating: '4.4',
-    image: 'https://images.unsplash.com/photo-1598514982373-8c0e6f34f4bb?auto=format&fit=crop&w=400&q=80',
+    image: cold_brew,
+    description: 'Slow-brewed cold coffee with a smooth, refreshing, and less acidic taste.',
   },
   {
     id: 10,
@@ -96,6 +118,7 @@ export const coffeeItems: CoffeeItem[] = [
     price: '48.00',
     volume: '150 ml',
     rating: '4.9',
-    image: 'https://images.unsplash.com/photo-1590080874088-eec64895b423?auto=format&fit=crop&w=400&q=80',
+    image: affogato,
+    description: 'A delightful dessert coffee with hot espresso poured over vanilla ice cream.',
   },
 ];
