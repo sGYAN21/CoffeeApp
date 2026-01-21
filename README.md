@@ -51,5 +51,5 @@ Home & Menu
 <p align="center"> <img src="screenshots/HomePage.png" width="30%" alt="Coffee Dashboard" /> 
 </p>
 <p align="center">
-<img src="screenshots/DetaliPage.png" width="30%" alt="Coffee Details" /> 
+<img src="screenshots/DetailPage.png" width="30%" alt="Coffee Details" /> 
 </p>
