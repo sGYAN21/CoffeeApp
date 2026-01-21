@@ -46,7 +46,7 @@ const SignInScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.title}>Hello, Coffee Paglu</Text>
         
         {/* Email Input */}
         <View style={styles.inputContainer}>
@@ -91,8 +91,6 @@ const SignInScreen = () => {
         </TouchableOpacity>
 
         <View style={styles.dividerContainer}>
-          <View style={styles.divider} />
-          <Text style={styles.dividerText}>OR</Text>
           <View style={styles.divider} />
         </View>
 
