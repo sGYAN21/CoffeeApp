@@ -40,7 +40,7 @@ Navigation logic automatically directs authenticated users to the Home dashboard
 All screenshots are stored in the Screenshots/ directory.
 
 Authentication
-<p align="center"> <img src="Screenshots/image_c5033e.png" width="30%" alt="Sign In Screen" /> <img src="Screenshots/image_c50356.png" width="30%" alt="Sign Up Screen" /> </p>
+<p align="center"> <img src="screenshots/sigin.png" width="30%" alt="Sign In Screen" /> <img src="screenshots/signup.png" width="30%" alt="Sign Up Screen" /> </p>
 
 Home & Menu
-<p align="center"> <img src="Screenshots/image_c50339.png" width="30%" alt="Coffee Dashboard" /> <img src="Screenshots/image_c5031f.png" width="30%" alt="Coffee Details" /> </p>
+<p align="center"> <img src="screenshots/HomePage.png" width="30%" alt="Coffee Dashboard" /> <img src="screenshots/DetalilPage.png" width="30%" alt="Coffee Details" /> </p>
