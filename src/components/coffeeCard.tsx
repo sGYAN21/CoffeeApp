@@ -1,27 +1,26 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { theme, CoffeeItem } from '../constants';
+import { theme, Item } from '../constants';
 import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
 interface Props {
-  item: CoffeeItem;
+  item: Item;
 }
 
 const CoffeeCard: React.FC<Props> = ({ item }) => {
-  const navigation = useNavigation<any>(); // Add <any> to prevent TS errors with navigation.navigate
+  const navigation = useNavigation<any>(); 
 
   return (
-    // 1. Wrap the whole card in a TouchableOpacity for better UX
+ 
     <TouchableOpacity 
       activeOpacity={1} 
       onPress={() => navigation.navigate('ProductDetails', { item })} 
       style={styles.cardContainer}
     >
       <View style={styles.cardInner}>
-        {/* 2. Handle both local assets and remote URIs */}
         <Image 
           source={typeof item.image === 'string' ? { uri: item.image } : item.image} 
           style={styles.image} 
@@ -42,7 +41,6 @@ const CoffeeCard: React.FC<Props> = ({ item }) => {
           <View style={styles.footer}>
             <Text style={styles.price}>$ {item.price}</Text>
             
-            {/* 3. Keep the button visual but prevent navigation double-trigger */}
             <View style={styles.addButton}>
               <Icon name="add" size={24} color="black" />
             </View>
@@ -68,7 +66,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     padding: 25,
     justifyContent: 'flex-end',
-    // Elevation for Android and Shadows for iOS to match design depth
     elevation: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 10 },

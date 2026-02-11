@@ -8,15 +8,17 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  Image,
 } from 'react-native';
 import React, { useState } from 'react';
 import Snackbar from 'react-native-snackbar';
 import Feather from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../types';
-import { createUser } from '../../services/firebase';
-
+import { emailPasswordSignUp } from '../../services/firebase';
+import bg_signup from '../../assets/signup_img.png'
 type SignupNavProp = NativeStackNavigationProp<AuthStackParamList, 'signup'>;
 
 const SignupScreen = () => {
@@ -29,7 +31,7 @@ const SignupScreen = () => {
 
   const handleSignup = async () => {
     try {
-      const res = await createUser(email, password, userName);
+      const res = await emailPasswordSignUp(email, password, userName);
       console.log(res);
       Snackbar.show({
         text: 'Account created successfully 🎉',
@@ -59,26 +61,31 @@ const SignupScreen = () => {
       >
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.title}>Sign up to your</Text>
-            <Text style={styles.title}>Account</Text>
-            <Text style={styles.subtitle}>
-              Enter your email and password to register
-            </Text>
+            <Image
+            source={bg_signup}
+            style={{width:280, height:220}}
+            />
           </View>
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>Create Account</Text>
+            <View style={styles.cardContent}>
 
+          
+            <Text style={styles.cardTitle}>Create Account</Text>
+            {/* <Text style={styles.subtitle}>
+              Enter your email and password to register
+            </Text> */}
             <View style={styles.inputContainer}>
+              <Feather name="user" size={22} color="#999" />
               <TextInput
-                placeholder="User Name"
+                placeholder="Username"
                 placeholderTextColor="#999"
                 style={styles.input}
                 value={userName}
                 onChangeText={setUserName}
               />
-              <Feather name="user" size={22} color="#999" />
             </View>
             <View style={styles.inputContainer}>
+              <Feather name="mail" size={22} color="#999" />
               <TextInput
                 placeholder="Email"
                 placeholderTextColor="#999"
@@ -88,9 +95,10 @@ const SignupScreen = () => {
                 autoCapitalize="none"
                 keyboardType="email-address"
               />
-              <Feather name="mail" size={22} color="#999" />
+              
             </View>
             <View style={styles.inputContainer}>
+              <Feather name="lock" size={22} color="#999" />
               <TextInput
                 placeholder="Password"
                 placeholderTextColor="#999"
@@ -121,6 +129,7 @@ const SignupScreen = () => {
               </Text>
             </Text>
           </View>
+            </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -132,12 +141,12 @@ export default SignupScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#C67C4E',
+    backgroundColor: '#5D4037',
   },
   header: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 70,
+    marginVertical:50,
   },
   title: {
     color: '#fff',
@@ -155,10 +164,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 20,
     elevation: 5,
-    borderTopLeftRadius: 50,
-    justifyContent: 'center',
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+
+    // 
     alignItems: 'stretch',
-    paddingVertical: 40
+  },
+  cardContent:{
+  marginTop:60
   },
   cardTitle: {
     fontSize: 24,
@@ -183,7 +196,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#C67C4E',
+    backgroundColor: '#5D4037',
     height: 50,
     borderRadius: 10,
     justifyContent: 'center',
@@ -202,7 +215,7 @@ const styles = StyleSheet.create({
     color: '#444',
   },
   link: {
-    color: '#C67C4E',
+    color: '#5D4037',
     fontWeight: 'bold',
   },
 });

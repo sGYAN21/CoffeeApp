@@ -4,10 +4,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import { CoffeeItem } from '../constants';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ProductScreen from '../screens/ProductScreen';
 import SignupScreen from '../auth/SignUp/SignUpScreen';
 import SignInScreen from '../auth/SignIn/SignInScreen';
+import ForgetPassword from '../auth/ForgetPassword/ForgetPassword';
+import ProfileScreen from '../screens/ProfileScreen';
+import Favourite from '../screens/Favourite';
+import Cart from '../screens/Cart';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -16,15 +21,17 @@ export type RootStackParamList = {
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
+const Drawer = createDrawerNavigator();
 export default function AppNavigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
          <Stack.Screen name="signup" component={SignupScreen} />
          <Stack.Screen name="signin" component={SignInScreen} />
+         <Stack.Screen name="forgetpassword" component={ForgetPassword} />
         <Stack.Screen name="Home" component={HomeTabs} />
         <Stack.Screen name="ProductDetails" component={ProductScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -64,8 +71,15 @@ function HomeTabs() {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Favourite" component={HomeScreen} />
-      <Tab.Screen name="Cart" component={HomeScreen} />
+      <Tab.Screen name="Favourite" component={Favourite} />
+      <Tab.Screen name="Cart" component={Cart} />
     </Tab.Navigator>
+  );
+}
+function MyDrawer() {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen name="Home" component={HomeScreen} />
+    </Drawer.Navigator>
   );
 }
