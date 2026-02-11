@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
-import { CoffeeItem } from '../constants';
+import { Item } from '../constants';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -16,7 +16,7 @@ import Cart from '../screens/Cart';
 
 export type RootStackParamList = {
   Home: undefined;
-  ProductDetails: { item: CoffeeItem };
+  ProductDetails: { item: Item };
 };
 
 const Stack = createNativeStackNavigator();
