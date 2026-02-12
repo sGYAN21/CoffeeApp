@@ -48,6 +48,8 @@ const HomeScreen: React.FC = () => {
     setMainCategory(item);
     setActiveCategory('All'); 
   }
+
+  
   return (
     <SafeAreaProvider style={styles.container}>
 

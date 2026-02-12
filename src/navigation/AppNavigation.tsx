@@ -29,7 +29,8 @@ export default function AppNavigation() {
          <Stack.Screen name="signup" component={SignupScreen} />
          <Stack.Screen name="signin" component={SignInScreen} />
          <Stack.Screen name="forgetpassword" component={ForgetPassword} />
-        <Stack.Screen name="Home" component={HomeTabs} />
+         {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
+        <Stack.Screen name="MainTabs" component={HomeTabs} />
         <Stack.Screen name="ProductDetails" component={ProductScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>

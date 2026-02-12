@@ -21,18 +21,26 @@ const SignInScreen = () => {
   const [loading, setLoading] = useState(false);
     const [isPassVisible, setIsPassVisible] = useState<boolean>(false);
   const handleSignin = async () => {
-    if (!email || !password)
-      setLoading(true);
+
+  if (!email || !password) {
+    Snackbar.show({
+      text: 'Please enter both email and password',
+      duration: Snackbar.LENGTH_SHORT,
+      backgroundColor: '#FF0000',
+    });
+    return; 
+  }
     try {
       const res = await emailPasswordSignIn(email, password);
-      console.log("Logged in successfully:", res);
+      console.log("Logged in successfully:", res.user.uid);
       Snackbar.show({
         text: 'User Sign in successfully 🎉',
         duration: Snackbar.LENGTH_SHORT,
         backgroundColor: '#C67C4E',
         textColor: '#fff',
+        
       });
-      navigation.navigate('Home' as any);
+      navigation.navigate('MainTabs' as any);
 
     }
     catch (error: any) {
@@ -92,8 +100,6 @@ const SignInScreen = () => {
           >
             <Text style={styles.forgotText}>Forgot Password?</Text>
           </TouchableOpacity>
-
-          {/* 2. FIXED: onPress goes on the TouchableOpacity */}
           <TouchableOpacity
             style={styles.loginButton}
             onPress={handleSignin}
@@ -110,7 +116,6 @@ const SignInScreen = () => {
             <View style={styles.divider} />
           </View>
 
-          {/* Optional: Add a link to Sign Up screen */}
           <TouchableOpacity onPress={() => navigation.navigate('signup' as any)}>
             <Text style={styles.switchText}>
               Don't have an account? <Text style={styles.linkText}>Sign Up</Text>

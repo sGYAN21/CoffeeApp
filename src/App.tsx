@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import AppNavigation from "./navigation/AppNavigation" // Adjust path based on your folder structure
+import AppNavigation from "./navigation/AppNavigation" 
 
 function App(): React.JSX.Element {
   return (
