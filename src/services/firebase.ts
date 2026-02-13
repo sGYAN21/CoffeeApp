@@ -37,19 +37,17 @@ export const emailPasswordSignIn = async (email: string, password: string) => {
 
 export const signInWithGoogle = async () => {
   try {
-    // 1. Check if the device has Google Play Services
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     
-    // 2. Perform the sign-in request
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+ 
     const signInResult = await GoogleSignin.signIn();
     
-    // 3. Extract the ID Token
     const idToken = signInResult.data?.idToken;
     if (!idToken) {
       throw new Error('No ID token found');
     }
 
-    // 4. Create a Google credential with the token
+
     const googleCredential = GoogleAuthProvider.credential(idToken);
 
     // 5. Sign-in the user with the credential
