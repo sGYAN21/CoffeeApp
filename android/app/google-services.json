@@ -12,7 +12,12 @@
           "package_name": "com.coffeeapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "431639826205-kdikfq5ksvns94rlplajsu1hn23b9vi8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA-kPq259yzexVel6TNjs8Rqby1vc1i2R8"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "431639826205-kdikfq5ksvns94rlplajsu1hn23b9vi8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
