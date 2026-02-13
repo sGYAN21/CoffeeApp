@@ -62,74 +62,74 @@ const SignupScreen = () => {
         <View style={styles.container}>
           <View style={styles.header}>
             <Image
-            source={bg_signup}
-            style={{width:280, height:220}}
+              source={bg_signup}
+              style={{ width: 280, height: 220 }}
             />
           </View>
           <View style={styles.card}>
             <View style={styles.cardContent}>
 
-          
-            <Text style={styles.cardTitle}>Create Account</Text>
-            {/* <Text style={styles.subtitle}>
+
+              <Text style={styles.cardTitle}>Create Account</Text>
+              {/* <Text style={styles.subtitle}>
               Enter your email and password to register
             </Text> */}
-            <View style={styles.inputContainer}>
-              <Feather name="user" size={22} color="#999" />
-              <TextInput
-                placeholder="Username"
-                placeholderTextColor="#999"
-                style={styles.input}
-                value={userName}
-                onChangeText={setUserName}
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <Feather name="mail" size={22} color="#999" />
-              <TextInput
-                placeholder="Email"
-                placeholderTextColor="#999"
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                autoCapitalize="none"
-                keyboardType="email-address"
-              />
-              
-            </View>
-            <View style={styles.inputContainer}>
-              <Feather name="lock" size={22} color="#999" />
-              <TextInput
-                placeholder="Password"
-                placeholderTextColor="#999"
-                style={styles.input}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={secure}
-              />
-              <TouchableOpacity onPress={() => setSecure(!secure)}>
-                <Feather
-                  name={secure ? 'eye' : 'eye-off'}
-                  size={22}
-                  color="#999"
+              <View style={styles.inputContainer}>
+                <Feather name="user" size={22} color="#999" />
+                <TextInput
+                  placeholder="Username"
+                  placeholderTextColor="#999"
+                  style={styles.input}
+                  value={userName}
+                  onChangeText={setUserName}
                 />
-              </TouchableOpacity>
-            </View>
+              </View>
+              <View style={styles.inputContainer}>
+                <Feather name="mail" size={22} color="#999" />
+                <TextInput
+                  placeholder="Email"
+                  placeholderTextColor="#999"
+                  style={styles.input}
+                  value={email}
+                  onChangeText={setEmail}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                />
 
-            <TouchableOpacity style={styles.button} onPress={handleSignup}>
-              <Text style={styles.buttonText}>Sign Up</Text>
-            </TouchableOpacity>
-            <Text style={styles.footerText}>
-              Already have an account?{' '}
-              <Text
-                onPress={() => navigation.navigate('signin')}
-                style={styles.link}
-              >
-                Sign in
+              </View>
+              <View style={styles.inputContainer}>
+                <Feather name="lock" size={22} color="#999" />
+                <TextInput
+                  placeholder="Password"
+                  placeholderTextColor="#999"
+                  style={styles.input}
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={secure}
+                />
+                <TouchableOpacity onPress={() => setSecure(!secure)}>
+                  <Feather
+                    name={secure ? 'eye' : 'eye-off'}
+                    size={22}
+                    color="#999"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <TouchableOpacity style={styles.button} onPress={handleSignup}>
+                <Text style={styles.buttonText}>Sign Up</Text>
+              </TouchableOpacity>
+              <Text style={styles.footerText}>
+                Already have an account?{' '}
+                <Text
+                  onPress={() => navigation.navigate('signin')}
+                  style={styles.link}
+                >
+                  Sign in
+                </Text>
               </Text>
-            </Text>
-          </View>
             </View>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical:50,
+    marginVertical: 50,
   },
   title: {
     color: '#fff',
@@ -170,8 +170,8 @@ const styles = StyleSheet.create({
     // 
     alignItems: 'stretch',
   },
-  cardContent:{
-  marginTop:60
+  cardContent: {
+    marginTop: 60
   },
   cardTitle: {
     fontSize: 24,

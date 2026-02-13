@@ -17,6 +17,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { theme } from '../constants';
 import { useNavigation } from '@react-navigation/native';
 import imageBack from '../assets/coffee-beans.jpg';
+import { useDispatch } from 'react-redux';
+import { useSnackbar } from '../context/SnackbarContext';
+import { addToCart } from '../store/slices/cartSlice';
 
 const { width, height } = Dimensions.get('window');
 const sizes = ['Small', 'Medium', 'Large'];
@@ -26,6 +29,8 @@ const ProductScreen = ({ route }: any) => {
   const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
 
+  const dispatch = useDispatch();
+  const { showSnackbar } = useSnackbar();
   const [selectedSize, setSelectedSize] = useState('Small');
   const [quantity, setQuantity] = useState(1);
 
@@ -34,25 +39,20 @@ const ProductScreen = ({ route }: any) => {
 
   const handleAddToCart = () => {
 
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    dispatch(addToCart({
+      ...item,
+      quantity: quantity,
+      selectedSize: selectedSize, // Ensure your CartItem type supports this if needed
+    }));
 
-    setTimeout(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    }, 2000);
+    // 2. Trigger Global Snackbar
+    showSnackbar(`${quantity} ${item.name} (${selectedSize}) added to cart`);
   };
 
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
-        
+
         {/* Header Section with Background Pattern */}
         <ImageBackground
           source={imageBack}
@@ -71,9 +71,9 @@ const ProductScreen = ({ route }: any) => {
 
           {/* Overlapping Coffee Image centered in header */}
           <View style={styles.imageContainer}>
-            <Image 
-              source={item.image} 
-              style={styles.mainImage} 
+            <Image
+              source={item.image}
+              style={styles.mainImage}
             />
           </View>
         </ImageBackground>
@@ -91,7 +91,7 @@ const ProductScreen = ({ route }: any) => {
           </View>
 
           <Text style={styles.sectionTitle}>Coffee size</Text>
-          
+
           <FlatList
             data={sizes}
             horizontal
@@ -119,8 +119,8 @@ const ProductScreen = ({ route }: any) => {
           </Text>
 
           <View style={styles.volumeRow}>
-            <Text style={styles.volumeLabel}>Volume <Text style={{fontWeight: 'bold'}}>{item.volume}</Text></Text>
-            
+            <Text style={styles.volumeLabel}>Volume <Text style={{ fontWeight: 'bold' }}>{item.volume}</Text></Text>
+
             <View style={styles.quantityContainer}>
               <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))} style={styles.qtyBtn}>
                 <Icon name="remove" size={20} color="black" />
@@ -136,7 +136,7 @@ const ProductScreen = ({ route }: any) => {
 
       {/* Buy Now Footer */}
       <View style={[styles.footer, { paddingBottom: insets.bottom + 15 }]}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.cartIconBtn}
           onPress={handleAddToCart}
         >
@@ -146,73 +146,164 @@ const ProductScreen = ({ route }: any) => {
           <Text style={styles.buyNowText}>Buy now</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Snackbar UI */}
-      <Animated.View 
-        style={[
-          styles.snackbar, 
-          { 
-            opacity: fadeAnim, 
-            top: insets.top,
-            transform: [{
-              translateY: fadeAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [20, 0] // Subtle slide up effect
-              })
-            }]
-          }
-        ]}
-      >
-        <Icon name="checkmark-circle" size={20} color="white" />
-        <Text style={styles.snackbarText}>Added to cart</Text>
-      </Animated.View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'white' },
-  headerBg: { width: '100%', height: height * 0.35 },
-  navBar: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginTop: 10 },
-  roundBtn: { backgroundColor: 'rgba(0,0,0,0.5)', padding: 10, borderRadius: 50 },
-  imageContainer: { alignItems: 'center', position: 'absolute', bottom: -100, width: '100%' },
-  mainImage: { width: 260, height: 260, borderRadius: 130 },
-  detailsContainer: { paddingHorizontal: 25, marginTop: 120 },
-  ratingBadge: { 
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    backgroundColor: 'rgba(198, 124, 78, 0.1)', 
-    paddingHorizontal: 12, 
-    paddingVertical: 6, 
-    borderRadius: 20, 
-    alignSelf: 'flex-start' 
+  container: {
+    flex: 1,
+    backgroundColor: 'white'
   },
-  ratingText: { marginLeft: 5, fontWeight: 'bold', color: theme.primary },
-  titleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 20 },
-  title: { fontSize: 32, fontWeight: 'bold', color: '#2F2D2C' },
-  price: { fontSize: 22, fontWeight: '600', color: '#2F2D2C' },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: '#2F2D2C', marginTop: 15 },
-  sizeList: { marginVertical: 15 },
-  sizeBtn: { backgroundColor: '#F0F0F0', paddingHorizontal: 28, paddingVertical: 14, borderRadius: 15, marginRight: 15 },
-  activeSizeBtn: { backgroundColor: theme.primary },
-  sizeText: { color: '#9B9B9B', fontWeight: '500' },
-  activeSizeText: { color: 'white' },
-  description: { color: '#9B9B9B', lineHeight: 24, fontSize: 16, marginTop: 10 },
-  volumeRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 25, marginBottom:10 },
-  volumeLabel: { fontSize: 16, color: '#9B9B9B' },
-  quantityContainer: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#F0F0F0', borderRadius: 30, padding: 5 },
-  qtyBtn: { padding: 10 },
-  qtyText: { fontSize: 18, fontWeight: 'bold', marginHorizontal: 15 },
-  footer: { 
-    position: 'absolute', bottom: 0, width: '100%', 
-    flexDirection: 'row', paddingHorizontal: 25, 
-    paddingTop: 20, backgroundColor: 'white',
+  headerBg: {
+    width: '100%',
+    height: height * 0.35
+  },
+  navBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    marginTop: 10
+  },
+  roundBtn: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 10,
+    borderRadius: 50
+  },
+  imageContainer: {
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: -100,
+    width: '100%'
+  },
+  mainImage: {
+    width: 260,
+    height: 260,
+    borderRadius: 130
+  },
+  detailsContainer: {
+    paddingHorizontal: 25,
+    marginTop: 120
+  },
+  ratingBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(198, 124, 78, 0.1)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    alignSelf: 'flex-start'
+  },
+  ratingText: {
+    marginLeft: 5,
+    fontWeight: 'bold',
+    color: theme.primary
+  },
+  titleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 20
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#2F2D2C'
+  },
+  price: {
+    fontSize: 22,
+    fontWeight: '600',
+    color: '#2F2D2C'
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2F2D2C',
+    marginTop: 15
+  },
+  sizeList: {
+    marginVertical: 15
+  },
+  sizeBtn: {
+    backgroundColor: '#F0F0F0',
+    paddingHorizontal: 28,
+    paddingVertical: 14,
+    borderRadius: 15,
+    marginRight: 15
+  },
+  activeSizeBtn: {
+    backgroundColor: theme.primary
+  },
+  sizeText: {
+    color: '#9B9B9B',
+    fontWeight: '500'
+  },
+  activeSizeText: {
+    color: 'white'
+  },
+  description: {
+    color: '#9B9B9B',
+    lineHeight: 24,
+    fontSize: 16,
+    marginTop: 10
+  },
+  volumeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 25,
+    marginBottom: 10
+  },
+  volumeLabel: {
+    fontSize: 16,
+    color: '#9B9B9B'
+  },
+  quantityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#F0F0F0',
+    borderRadius: 30,
+    padding: 5
+  },
+  qtyBtn: {
+    padding: 10
+  },
+  qtyText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginHorizontal: 15
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    flexDirection: 'row',
+    paddingHorizontal: 25,
+    paddingTop: 20,
+    backgroundColor: 'white',
     alignItems: 'center'
   },
-  cartIconBtn: { borderWidth: 1, borderColor: '#F0F0F0', borderRadius: 20, padding: 15, marginRight: 15 },
-  buyNowBtn: { flex: 1, backgroundColor: theme.primary, borderRadius: 20, height: 65, justifyContent: 'center', alignItems: 'center' },
-  buyNowText: { color: 'white', fontSize: 20, fontWeight: 'bold' },
-  
+  cartIconBtn: {
+    borderWidth: 1,
+    borderColor: '#F0F0F0',
+    borderRadius: 20,
+    padding: 15,
+    marginRight: 15
+  },
+  buyNowBtn: {
+    flex: 1,
+    backgroundColor: theme.primary,
+    borderRadius: 20, height: 65,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buyNowText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+
   // Snackbar Styles
   snackbar: {
     position: 'absolute',

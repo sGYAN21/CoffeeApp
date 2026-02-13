@@ -22,6 +22,18 @@ import grape from '../assets/juice/grapeJuice.jpg';
 import carrot from '../assets/juice/carrotJuice.jpg';
 import beetroot from '../assets/juice/beetrootJuice.jpg';
 
+// Liquor Images
+import jackDaniels from '../assets/liquor/jackDaniels.jpg';
+import jameson from '../assets/liquor/jameson.jpg';
+import absolut from '../assets/liquor/absolut.jpg';
+import smirnoff from '../assets/liquor/smirnoff.jpg'; 
+import bira from '../assets/liquor/bira.jpg';
+import kingfisher from '../assets/liquor/kingfisher.jpg';
+import bacardi from '../assets/liquor/bacardi.jpg';
+import oldMonk from '../assets/liquor/oldMonk.jpg';
+import sula from '../assets/liquor/sula.jpg';
+import jacobsCreek from '../assets/liquor/jacobsCreek.jpg';
+
 
 export interface Item {
   id: number;
@@ -48,7 +60,7 @@ export const categories: string[] = ['Coffee', 'Juice', 'liquor','Mocktails' ];
 export const subCategories: Record<string, string[]> = {
   'Coffee': ['All','Cappuccino', 'Latte', 'Espresso', 'Mocha'],
   'Juice': ['All','Orange', 'Apple', 'Mango', 'Pineapple'],
-  'liquor': ['All','Whiskey', 'Vodka', 'Bear', 'Rum', 'Wine'],
+  'liquor': ['All','Whiskey', 'Vodka', 'Beer', 'Rum', 'Wine'],
   'Mocktails': ['All','Virgin Mojito', 'Shirley Temple', 'Pina Colada'],
 };
 
@@ -277,3 +289,118 @@ export const juiceItems: Item[] = [
     category: 'Healthy',
   },
 ];
+
+export const liquorItems: Item[] = [
+  {
+    id: 1,
+    name: 'Jack Daniels',
+    price: '45',
+    volume: '750 ml',
+    rating: '4.8',
+    image: jackDaniels,
+    description: 'Classic Tennessee whiskey with a smooth smoky finish.',
+    type: 'liquor',
+    category: 'Whiskey',
+  },
+  {
+    id: 2,
+    name: 'Jameson Whiskey',
+    price: '40',
+    volume: '750 ml',
+    rating: '4.7',
+    image: jameson,
+    description: 'Smooth Irish whiskey with hints of vanilla and spice.',
+    type: 'liquor',
+    category: 'Whiskey',
+  },
+  {
+    id: 3,
+    name: 'Absolut Vodka',
+    price: '32',
+    volume: '750 ml',
+    rating: '4.6',
+    image: absolut,
+    description: 'Premium Swedish vodka with a clean and crisp taste.',
+    type: 'liquor',
+    category: 'Vodka',
+  },
+  {
+    id: 4,
+    name: 'Smirnoff Red',
+    price: '28',
+    volume: '750 ml',
+    rating: '4.5',
+    image: smirnoff,
+    description: 'Triple distilled vodka, smooth and versatile.',
+    type: 'liquor',
+    category: 'Vodka',
+  },
+  {
+    id: 5,
+    name: 'Bira White',
+    price: '6',
+    volume: '330 ml',
+    rating: '4.4',
+    image: bira,
+    description: 'Refreshing wheat beer with citrus notes.',
+    type: 'liquor',
+    category: 'Beer',
+  },
+  {
+    id: 6,
+    name: 'Kingfisher Premium',
+    price: '5',
+    volume: '330 ml',
+    rating: '4.3',
+    image: kingfisher,
+    description: 'India’s most loved premium lager beer.',
+    type: 'liquor',
+    category: 'Beer',
+  },
+  {
+    id: 7,
+    name: 'Bacardi White Rum',
+    price: '30',
+    volume: '750 ml',
+    rating: '4.5',
+    image: bacardi,
+    description: 'Light and smooth white rum for classic cocktails.',
+    type: 'liquor',
+    category: 'Rum',
+  },
+  {
+    id: 8,
+    name: 'Old Monk',
+    price: '22',
+    volume: '750 ml',
+    rating: '4.8',
+    image: oldMonk,
+    description: 'Iconic dark rum with rich vanilla flavor.',
+    type: 'liquor',
+    category: 'Rum',
+  },
+  {
+    id: 9,
+    name: 'Sula Sauvignon Blanc',
+    price: '18',
+    volume: '750 ml',
+    rating: '4.4',
+    image: sula,
+    description: 'Crisp white wine with tropical fruit notes.',
+    type: 'liquor',
+    category: 'Wine',
+  },
+  {
+    id: 10,
+    name: 'Jacobs Creek Shiraz',
+    price: '20',
+    volume: '750 ml',
+    rating: '4.6',
+    image: jacobsCreek,
+    description: 'Bold red wine with rich berry flavors.',
+    type: 'liquor',
+    category: 'Wine',
+  },
+];
+
+

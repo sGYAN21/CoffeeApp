@@ -3,7 +3,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
   StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, ActivityIndicator,
-  Image
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { AuthStackParamList } from '../types';
@@ -19,17 +22,17 @@ const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-    const [isPassVisible, setIsPassVisible] = useState<boolean>(false);
+  const [isPassVisible, setIsPassVisible] = useState<boolean>(false);
   const handleSignin = async () => {
 
-  if (!email || !password) {
-    Snackbar.show({
-      text: 'Please enter both email and password',
-      duration: Snackbar.LENGTH_SHORT,
-      backgroundColor: '#FF0000',
-    });
-    return; 
-  }
+    if (!email || !password) {
+      Snackbar.show({
+        text: 'Please enter both email and password',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#FF0000',
+      });
+      return;
+    }
     try {
       const res = await emailPasswordSignIn(email, password);
       console.log("Logged in successfully:", res.user.uid);
@@ -38,7 +41,7 @@ const SignInScreen = () => {
         duration: Snackbar.LENGTH_SHORT,
         backgroundColor: '#C67C4E',
         textColor: '#fff',
-        
+
       });
       navigation.navigate('MainTabs' as any);
 
@@ -53,77 +56,84 @@ const SignInScreen = () => {
   };
 
   return (
-    <SafeAreaProvider style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          source={bg_signin}
-          style={{ width: 240, height: 250, }}
-          resizeMode='contain'
-        />
-      </View>
-      <View style={styles.card}>
-        <View style={styles.content}>
-          <Text style={styles.title}>Hello, Coffee Paglu</Text>
-
-
-
-          {/* Email Input */}
-          <View style={styles.inputContainer}>
-            <Icon name="mail-outline" size={20} color="#666" style={styles.icon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps="handled">
+        <SafeAreaProvider style={styles.container}>
+          <View style={styles.header}>
+            <Image
+              source={bg_signin}
+              style={{ width: 240, height: 250, }}
+              resizeMode='contain'
             />
           </View>
+          <View style={styles.card}>
+            <View style={styles.content}>
+              <Text style={styles.title}>Hello, Coffee Paglu</Text>
 
-          {/* Password Input */}
-          <View style={styles.inputContainer}>
-            <Icon name="lock-closed-outline" size={20} color="#666" style={styles.icon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-            <TouchableOpacity onPress={() => setIsPassVisible(!isPassVisible)}>
-              <Icon name={isPassVisible ? "eye-outline" : "eye-off-outline"} size={20} color="#666" />
-            </TouchableOpacity>
+
+
+              {/* Email Input */}
+              <View style={styles.inputContainer}>
+                <Icon name="mail-outline" size={20} color="#666" style={styles.icon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+              </View>
+
+              {/* Password Input */}
+              <View style={styles.inputContainer}>
+                <Icon name="lock-closed-outline" size={20} color="#666" style={styles.icon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                />
+                <TouchableOpacity onPress={() => setIsPassVisible(!isPassVisible)}>
+                  <Icon name={isPassVisible ? "eye-outline" : "eye-off-outline"} size={20} color="#666" />
+                </TouchableOpacity>
+              </View>
+
+              <TouchableOpacity
+                onPress={() => navigation.navigate('forgetpassword' as any)}
+              >
+                <Text style={styles.forgotText}>Forgot Password?</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.loginButton}
+                onPress={handleSignin}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.loginButtonText}>Sign In</Text>
+                )}
+              </TouchableOpacity>
+
+              <View style={styles.dividerContainer}>
+                <View style={styles.divider} />
+              </View>
+
+              <TouchableOpacity onPress={() => navigation.navigate('signup' as any)}>
+                <Text style={styles.switchText}>
+                  Don't have an account? <Text style={styles.linkText}>Sign Up</Text>
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate('forgetpassword' as any)}
-          >
-            <Text style={styles.forgotText}>Forgot Password?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={handleSignin}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.loginButtonText}>Sign In</Text>
-            )}
-          </TouchableOpacity>
-
-          <View style={styles.dividerContainer}>
-            <View style={styles.divider} />
-          </View>
-
-          <TouchableOpacity onPress={() => navigation.navigate('signup' as any)}>
-            <Text style={styles.switchText}>
-              Don't have an account? <Text style={styles.linkText}>Sign Up</Text>
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </SafeAreaProvider>
+        </SafeAreaProvider>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

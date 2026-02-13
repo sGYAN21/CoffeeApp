@@ -13,6 +13,9 @@ import ForgetPassword from '../auth/ForgetPassword/ForgetPassword';
 import ProfileScreen from '../screens/ProfileScreen';
 import Favourite from '../screens/Favourite';
 import Cart from '../screens/Cart';
+import { View } from 'react-native';
+import SplashScreen from '../screens/SplashScreen';
+
 
 export type RootStackParamList = {
   Home: undefined;
@@ -24,10 +27,12 @@ const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 export default function AppNavigation() {
   return (
+    <View style={{ flex: 1 }}>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-         <Stack.Screen name="signup" component={SignupScreen} />
+           <Stack.Screen name="splashScreen" component={SplashScreen} />
          <Stack.Screen name="signin" component={SignInScreen} />
+         <Stack.Screen name="signup" component={SignupScreen} />
          <Stack.Screen name="forgetpassword" component={ForgetPassword} />
          {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
         <Stack.Screen name="MainTabs" component={HomeTabs} />
@@ -35,6 +40,7 @@ export default function AppNavigation() {
         <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+    </View>
   );
 }
 function HomeTabs() {
