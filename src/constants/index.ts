@@ -1,39 +1,49 @@
 import { ImageSourcePropType } from 'react-native';
-import affogato from '../assets/coffee/affogato.jpg';
-import americano from '../assets/coffee/americano.jpg';
-import cappuccino from '../assets/coffee/cappuccino.jpg';
-import cold_brew from '../assets/coffee/cold_brew.jpg';
-import espresso from '../assets/coffee/espresso.jpg';
-import flatwhite from '../assets/coffee/flatwhite.jpg';
-import irish from '../assets/coffee/irish.jpg';
-import latte from '../assets/coffee/latte.jpg';
-import macchiato from '../assets/coffee/macchiato.jpg';
-import mocha from '../assets/coffee/mocha.jpg';
+import affogato from '../assets/coffee/affogato.webp';
+import americano from '../assets/coffee/americano.webp';
+import cappuccino from '../assets/coffee/cappuccino.webp';
+import cold_brew from '../assets/coffee/cold_brew.webp';
+import espresso from '../assets/coffee/espresso.webp';
+import flatwhite from '../assets/coffee/flatwhite.webp';
+import irish from '../assets/coffee/irish.webp';
+import latte from '../assets/coffee/latte.webp';
+import macchiato from '../assets/coffee/macchiato.webp';
+import mocha from '../assets/coffee/mocha.webp';
 
 // Juice Images
-import orange from '../assets/juice/orangeJuice.jpg';
-import apple from '../assets/juice/appleJuice.jpg';
-import mango from '../assets/juice/mangoJuice.jpg'; 
-import pineapple from '../assets/juice/pineappleJuice.jpg';
-import watermelon from '../assets/juice/watermelonJuice.jpg';
-import pomegranate from '../assets/juice/pomegranateJuice.jpg';
-import mixedFruit from '../assets/juice/mixedFruitJuice.jpg';
-import grape from '../assets/juice/grapeJuice.jpg';
-import carrot from '../assets/juice/carrotJuice.jpg';
-import beetroot from '../assets/juice/beetrootJuice.jpg';
+import orange from '../assets/juice/orangeJuice.webp';
+import apple from '../assets/juice/appleJuice.webp';
+import mango from '../assets/juice/mangoJuice.webp'; 
+import pineapple from '../assets/juice/pineappleJuice.webp';
+import watermelon from '../assets/juice/watermelonJuice.webp';
+import pomegranate from '../assets/juice/pomegranateJuice.webp';
+import mixedFruit from '../assets/juice/mixedFruitJuice.webp';
+import grape from '../assets/juice/grapeJuice.webp';
+import carrot from '../assets/juice/carrotJuice.webp';
+import beetroot from '../assets/juice/beetrootJuice.webp';
 
 // Liquor Images
-import jackDaniels from '../assets/liquor/jackDaniels.jpg';
-import jameson from '../assets/liquor/jameson.jpg';
-import absolut from '../assets/liquor/absolut.jpg';
-import smirnoff from '../assets/liquor/smirnoff.jpg'; 
-import bira from '../assets/liquor/bira.jpg';
-import kingfisher from '../assets/liquor/kingfisher.jpg';
-import bacardi from '../assets/liquor/bacardi.jpg';
-import oldMonk from '../assets/liquor/oldMonk.jpg';
-import sula from '../assets/liquor/sula.jpg';
-import jacobsCreek from '../assets/liquor/jacobsCreek.jpg';
-
+import jackDaniels from '../assets/liquor/jackDaniels.webp';
+import jameson from '../assets/liquor/jameson.webp';
+import absolut from '../assets/liquor/absolut.webp';
+import smirnoff from '../assets/liquor/smirnoff.webp'; 
+import bira from '../assets/liquor/bira.webp';
+import kingfisher from '../assets/liquor/kingfisher.webp';
+import bacardi from '../assets/liquor/bacardi.webp';
+import oldMonk from '../assets/liquor/oldMonk.webp';
+import sula from '../assets/liquor/sula.webp';
+import jacobsCreek from '../assets/liquor/jacobsCreek.webp';
+// Mocktail Images
+import virginMojito from '../assets/mocktails/virginMojito.webp';
+import shirleyTemple from '../assets/mocktails/shirleyTemple.webp';
+import pinaColada from '../assets/mocktails/pinaColada.webp';
+import blueLagoon from '../assets/mocktails/blueLagoon.webp';
+import fruitPunch from '../assets/mocktails/fruitPunch.webp';
+import mintCooler from '../assets/mocktails/mintCooler.webp';
+import watermelonMojito from '../assets/mocktails/watermelonMojito.webp';
+import peachIcedTea from '../assets/mocktails/peachIcedTea.webp';
+import strawberryLemonade from '../assets/mocktails/strawberryLemonade.webp';
+import greenAppleFizz from '../assets/mocktails/greenAppleFizz.webp';
 
 export interface Item {
   id: number;
@@ -400,6 +410,119 @@ export const liquorItems: Item[] = [
     description: 'Bold red wine with rich berry flavors.',
     type: 'liquor',
     category: 'Wine',
+  },
+];
+
+export const mocktailItems: Item[] = [
+  {
+    id: 1,
+    name: 'Virgin Mojito',
+    price: '45.00',
+    volume: '250 ml',
+    rating: '4.6',
+    image: virginMojito,
+    description: 'Refreshing mix of lime, mint, sugar, and soda water.',
+    type: 'Mocktails',
+    category: 'Virgin Mojito',
+  },
+  {
+    id: 2,
+    name: 'Shirley Temple',
+    price: '40.00',
+    volume: '250 ml',
+    rating: '4.4',
+    image: shirleyTemple,
+    description: 'Sweet blend of ginger ale and grenadine with a cherry twist.',
+    type: 'Mocktails',
+    category: 'Shirley Temple',
+  },
+  {
+    id: 3,
+    name: 'Virgin Pina Colada',
+    price: '50.00',
+    volume: '300 ml',
+    rating: '4.7',
+    image: pinaColada,
+    description: 'Creamy pineapple and coconut mocktail served chilled.',
+    type: 'Mocktails',
+    category: 'Pina Colada',
+  },
+  {
+    id: 4,
+    name: 'Blue Lagoon',
+    price: '48.00',
+    volume: '250 ml',
+    rating: '4.5',
+    image: blueLagoon,
+    description: 'Cool and citrusy blue mocktail with lemon flavors.',
+    type: 'Mocktails',
+    category: 'Special',
+  },
+  {
+    id: 5,
+    name: 'Fruit Punch',
+    price: '42.00',
+    volume: '300 ml',
+    rating: '4.3',
+    image: fruitPunch,
+    description: 'A colorful mix of fresh fruit juices and soda.',
+    type: 'Mocktails',
+    category: 'Fruity',
+  },
+  {
+    id: 6,
+    name: 'Mint Cooler',
+    price: '38.00',
+    volume: '250 ml',
+    rating: '4.2',
+    image: mintCooler,
+    description: 'Chilled mint, lime, and soda for instant freshness.',
+    type: 'Mocktails',
+    category: 'Refreshing',
+  },
+  {
+    id: 7,
+    name: 'Watermelon Mojito',
+    price: '46.00',
+    volume: '300 ml',
+    rating: '4.6',
+    image: watermelonMojito,
+    description: 'Juicy watermelon blended with mint and lime.',
+    type: 'Mocktails',
+    category: 'Virgin Mojito',
+  },
+  {
+    id: 8,
+    name: 'Peach Iced Tea',
+    price: '44.00',
+    volume: '300 ml',
+    rating: '4.4',
+    image: peachIcedTea,
+    description: 'Smooth iced tea infused with peach flavors.',
+    type: 'Mocktails',
+    category: 'Iced Tea',
+  },
+  {
+    id: 9,
+    name: 'Strawberry Lemonade',
+    price: '43.00',
+    volume: '250 ml',
+    rating: '4.5',
+    image: strawberryLemonade,
+    description: 'Sweet strawberries mixed with tangy lemonade.',
+    type: 'Mocktails',
+    category: 'Fruity',
+  },
+  {
+    id: 10,
+    name: 'Green Apple Fizz',
+    price: '47.00',
+    volume: '250 ml',
+    rating: '4.6',
+    image: greenAppleFizz,
+    description: 'Crisp green apple juice topped with sparkling soda.',
+    type: 'Mocktails',
+    category: 'Special',
   },
 ];
 

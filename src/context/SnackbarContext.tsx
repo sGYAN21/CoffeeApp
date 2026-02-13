@@ -22,7 +22,7 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
         setTimeout(() => {
             Animated.timing(fadeAnim, { toValue: 0, duration: 300, useNativeDriver: true }).start(() => setVisible(false));
-        }, 2000);
+        }, 3000);
     };
 
     return (

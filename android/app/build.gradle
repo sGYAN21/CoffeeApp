@@ -121,3 +121,22 @@ dependencies {
         implementation jscFlavor
     }
 }
+configurations.all {
+    resolutionStrategy {
+        force "androidx.core:core:1.16.0"
+        force "androidx.appcompat:appcompat:1.6.1" // Explicitly force the correct name
+
+        eachDependency { details ->
+            if (details.requested.group == 'com.android.support') {
+                // Map the old "appcompat-v7" to the new "androidx.appcompat"
+                if (details.requested.name == 'appcompat-v7') {
+                    details.useTarget "androidx.appcompat:appcompat:1.6.1"
+                } 
+                // Map everything else to the standard androidx group
+                else if (details.requested.name != 'multidex') {
+                    details.useTarget "androidx.${details.requested.name}:${details.requested.name}:+"
+                }
+            }
+        }
+    }
+}

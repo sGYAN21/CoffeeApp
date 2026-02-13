@@ -2,18 +2,25 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
-  StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, ActivityIndicator,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  ActivityIndicator,
   Image,
   KeyboardAvoidingView,
   ScrollView,
-  Platform
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { AuthStackParamList } from '../types';
 import { emailPasswordSignIn } from '../../services/firebase';
 import Snackbar from 'react-native-snackbar';
-import bg_signin from '../../assets/signin_img.png'
+import bg_signin from '../../assets/signin_img.png';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import GoogleSignInButton from '../../components/GoogleSignInButton';
 type SigninNavProp = NativeStackNavigationProp<AuthStackParamList, 'signin'>;
 
 const SignInScreen = () => {
@@ -24,7 +31,6 @@ const SignInScreen = () => {
   const [loading, setLoading] = useState(false);
   const [isPassVisible, setIsPassVisible] = useState<boolean>(false);
   const handleSignin = async () => {
-
     if (!email || !password) {
       Snackbar.show({
         text: 'Please enter both email and password',
@@ -35,24 +41,19 @@ const SignInScreen = () => {
     }
     try {
       const res = await emailPasswordSignIn(email, password);
-      console.log("Logged in successfully:", res.user.uid);
+      console.log('Logged in successfully:', res.user.uid);
       Snackbar.show({
         text: 'User Sign in successfully 🎉',
         duration: Snackbar.LENGTH_SHORT,
         backgroundColor: '#C67C4E',
         textColor: '#fff',
-
       });
       navigation.navigate('MainTabs' as any);
-
-    }
-    catch (error: any) {
+    } catch (error: any) {
       console.log(error);
-
     } finally {
       setLoading(false);
     }
-
   };
 
   return (
@@ -60,24 +61,30 @@ const SignInScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={styles.container}
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1, }} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
         <SafeAreaProvider style={styles.container}>
           <View style={styles.header}>
             <Image
               source={bg_signin}
-              style={{ width: 240, height: 250, }}
-              resizeMode='contain'
+              style={{ width: 240, height: 250 }}
+              resizeMode="contain"
             />
           </View>
           <View style={styles.card}>
             <View style={styles.content}>
               <Text style={styles.title}>Hello, Coffee Paglu</Text>
 
-
-
               {/* Email Input */}
               <View style={styles.inputContainer}>
-                <Icon name="mail-outline" size={20} color="#666" style={styles.icon} />
+                <Icon
+                  name="mail-outline"
+                  size={20}
+                  color="#666"
+                  style={styles.icon}
+                />
                 <TextInput
                   style={styles.input}
                   placeholder="Email"
@@ -90,16 +97,27 @@ const SignInScreen = () => {
 
               {/* Password Input */}
               <View style={styles.inputContainer}>
-                <Icon name="lock-closed-outline" size={20} color="#666" style={styles.icon} />
+                <Icon
+                  name="lock-closed-outline"
+                  size={20}
+                  color="#666"
+                  style={styles.icon}
+                />
                 <TextInput
                   style={styles.input}
                   placeholder="Password"
                   value={password}
                   onChangeText={setPassword}
-                  secureTextEntry
+                  secureTextEntry={!isPassVisible}
                 />
-                <TouchableOpacity onPress={() => setIsPassVisible(!isPassVisible)}>
-                  <Icon name={isPassVisible ? "eye-outline" : "eye-off-outline"} size={20} color="#666" />
+                <TouchableOpacity
+                  onPress={() => setIsPassVisible(!isPassVisible)}
+                >
+                  <Icon
+                    name={isPassVisible ? 'eye-outline' : 'eye-off-outline'}
+                    size={20}
+                    color="#666"
+                  />
                 </TouchableOpacity>
               </View>
 
@@ -122,11 +140,17 @@ const SignInScreen = () => {
 
               <View style={styles.dividerContainer}>
                 <View style={styles.divider} />
+                <Text style={styles.dividerText}>OR</Text>
+                <View style={styles.divider} />
               </View>
 
-              <TouchableOpacity onPress={() => navigation.navigate('signup' as any)}>
+              <GoogleSignInButton />
+              <TouchableOpacity
+                onPress={() => navigation.navigate('signup' as any)}
+              >
                 <Text style={styles.switchText}>
-                  Don't have an account? <Text style={styles.linkText}>Sign Up</Text>
+                  Don't have an account?{' '}
+                  <Text style={styles.linkText}>Sign Up</Text>
                 </Text>
               </TouchableOpacity>
             </View>
@@ -140,7 +164,7 @@ const SignInScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#5D4037'
+    backgroundColor: '#5D4037',
   },
   header: {
     justifyContent: 'center',
@@ -150,13 +174,13 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
     marginTop: 20,
-    flex: 1
+    flex: 1,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 30,
-    color: '#333'
+    color: '#333',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -165,7 +189,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 8,
     marginBottom: 15,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   card: {
     flex: 1,
@@ -177,16 +201,16 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
   icon: {
-    marginRight: 10
+    marginRight: 10,
   },
   input: {
     flex: 1,
-    height: 50
+    height: 50,
   },
   forgotText: {
     textAlign: 'right',
     color: '#5D4037',
-    marginBottom: 20
+    marginBottom: 20,
   },
   loginButton: {
     backgroundColor: '#5D4037',
@@ -194,36 +218,36 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     height: 55,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   loginButtonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 30
+    marginVertical: 30,
   },
   divider: {
     flex: 1,
     height: 1,
-    backgroundColor: '#ddd'
+    backgroundColor: '#ddd',
   },
   dividerText: {
     marginHorizontal: 10,
-    color: '#888'
+    color: '#888',
   },
   switchText: {
     textAlign: 'center',
     marginTop: 20,
-    color: '#666'
+    color: '#666',
   },
   linkText: {
     color: '#5D4037',
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });
 
 export default SignInScreen;

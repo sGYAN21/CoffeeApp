@@ -14,6 +14,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import man from '../assets/icons/man.png'
 import woman from '../assets/icons/woman.png'
+import { SignOut } from '../services/firebase';
 const ProfileItem = ({ icon, label, showBorder = true }: { icon: string, label: string, showBorder?: boolean }) => (
     <TouchableOpacity style={[styles.menuItem, showBorder && styles.borderBottom]}>
         <View style={styles.menuItemContent}>
@@ -26,6 +27,17 @@ const ProfileItem = ({ icon, label, showBorder = true }: { icon: string, label: 
 
 const ProfileScreen = () => {
     const navigation = useNavigation<any>();
+    const handleLogout = async () => {
+    try {
+      await SignOut();
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'signin' }],
+      });
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container} edges={['top']}>
@@ -39,7 +51,7 @@ const ProfileScreen = () => {
                                 <FontAwesome name="chevron-left" size={25} color='#fff' />
 
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.signoutBtn}>
+                            <TouchableOpacity style={styles.signoutBtn}  onPress={handleLogout}>
                                 <FontAwesome name="sign-out" size={22} color='#fff' />
                             </TouchableOpacity>
                         </View>

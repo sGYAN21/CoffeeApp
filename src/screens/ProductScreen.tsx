@@ -34,15 +34,12 @@ const ProductScreen = ({ route }: any) => {
   const [selectedSize, setSelectedSize] = useState('Small');
   const [quantity, setQuantity] = useState(1);
 
-  // --- Snackbar Animation Logic ---
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-
   const handleAddToCart = () => {
 
     dispatch(addToCart({
       ...item,
       quantity: quantity,
-      selectedSize: selectedSize, // Ensure your CartItem type supports this if needed
+      selectedSize: selectedSize, 
     }));
 
     // 2. Trigger Global Snackbar

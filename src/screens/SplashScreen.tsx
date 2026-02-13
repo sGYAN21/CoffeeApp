@@ -4,7 +4,7 @@ import { FirebaseAuthTypes, getAuth, onAuthStateChanged } from '@react-native-fi
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../auth/types';
-
+import LoadingIndicator from '../components/LoadingIndicator';
 type SplashNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'splashScreen'>;
 
 const SplashScreen = () => {
@@ -12,10 +12,7 @@ const SplashScreen = () => {
 
   const hasNavigated = useRef(false);
 useEffect(() => {
-    /**
-     * SOLUTION: Use the modular onAuthStateChanged.
-     * It takes the auth instance as the first argument.
-     */
+    
     const unsubscribe = onAuthStateChanged(getAuth(), (user: FirebaseAuthTypes.User | null) => {
       
       if (hasNavigated.current) return;
@@ -29,7 +26,7 @@ useEffect(() => {
           console.log("No user detected, navigating to signin");
           navigation.dispatch(StackActions.replace('signin'));
         }
-      }, 2500);
+      }, 2000);
 
       return () => clearTimeout(timer);
     });
@@ -41,10 +38,15 @@ useEffect(() => {
     <View style={styles.container}>
       <StatusBar backgroundColor="#2C1B12" barStyle="light-content" />
       <View style={styles.brandContainer}>
-        <Text style={styles.logo}>BeanLog</Text>
-        <Text style={styles.tagline}>Brew the perfect inventory</Text>
+        <Text style={styles.logo}>Coffee Paglu</Text>
+        {/* <Text style={styles.tagline}>Sip. Scan. Repeat. ☕</Text> */}
+        <Text style={styles.tagline}>First coffee. Then everything else ☕</Text>
+
       </View>
-      <ActivityIndicator size="large" color="#D4A373" style={styles.loader} />
+      <View style={styles.loaderContainer}>
+        {/* Use the new component here */}
+        <LoadingIndicator size={60} color="#D4A373" speed={500} />
+      </View>
     </View>
   );
 };
@@ -76,8 +78,11 @@ const styles = StyleSheet.create({
     color: '#D4A373',
     fontWeight: '500',
     letterSpacing: 0.5,
+    justifyContent:'center',
+    alignItems:'center',
+    textAlign:'center',
   },
-  loader: {
-    marginTop: 60,
+  loaderContainer: {
+    marginTop: 20,
   },
 });
