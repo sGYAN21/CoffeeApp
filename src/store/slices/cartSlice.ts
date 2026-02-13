@@ -3,6 +3,7 @@ import { Item } from '../../constants';
 
 export interface CartItem extends Item {
   quantity: number;
+  selected: boolean;
 }
 interface CartState {
   items: CartItem[];
@@ -12,6 +13,12 @@ interface CartState {
 const initialState: CartState = {
   items: [],
   totalPrice: 0,
+};
+
+const calculateTotal = (items: CartItem[]) => {
+  return items
+    .filter(item => item.selected)
+    .reduce((total, item) => total + Number(item.price) * item.quantity, 0);
 };
 
 export const cartSlice = createSlice({
@@ -27,9 +34,18 @@ export const cartSlice = createSlice({
         existingItem.quantity += 1;
       } else {
         // Add new item with initial quantity of 1
-        state.items.push({ ...action.payload, quantity: 1 });
+        state.items.push({ ...action.payload, quantity: 1, selected: true });
       }
-      state.totalPrice += Number(action.payload.price);
+     state.totalPrice = calculateTotal(state.items);
+    },
+    toggleItemSelection: (state, action: PayloadAction<{ id: number; type: string }>) => {
+      const item = state.items.find(
+        i => i.id === action.payload.id && i.type === action.payload.type
+      );
+      if (item) {
+        item.selected = !item.selected;
+        state.totalPrice = calculateTotal(state.items);
+      }
     },
     decrementQuantity: (state, action: PayloadAction<{ id: number, type: string }>) => {
       const itemIndex = state.items.findIndex(
@@ -67,5 +83,5 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart,decrementQuantity, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart,decrementQuantity, clearCart,toggleItemSelection } = cartSlice.actions;
 export default cartSlice.reducer;

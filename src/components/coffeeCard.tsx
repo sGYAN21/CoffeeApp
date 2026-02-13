@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSnackbar } from '../context/SnackbarContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTofavourite, removeFromfavourite } from '../store/slices/favouriteSlice';
-import { addToCart, removeFromCart } from '../store/slices/cartSlice';
+import { addToCart, removeFromCart, } from '../store/slices/cartSlice';
 import { CartItem } from '../store/slices/cartSlice';
 import { RootState } from '../store/store';
 const { width } = Dimensions.get('window');
@@ -48,7 +48,7 @@ const CoffeeCard: React.FC<Props> = ({ item }) => {
       showSnackbar(`${item.name} removed from cart`);
     } else {
       // Add if not there
-      const itemToAdd: CartItem = { ...item, quantity: 1 };
+      const itemToAdd: CartItem = { ...item, quantity: 1,selected:false };
       dispatch(addToCart(itemToAdd));
       showSnackbar(`${item.name} added to cart!`);
     }

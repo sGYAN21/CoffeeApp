@@ -29,8 +29,8 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         <SnackbarContext.Provider value={{ showSnackbar }}>
             {children}
             {visible && (
-                <Animated.View style={[styles.snackbar, { top: insets.top + 10, opacity: fadeAnim }]}>
-                    <Icon name="checkmark-circle" size={18} color="white" />
+                <Animated.View style={[styles.snackbar, { top: insets.top-10, opacity: fadeAnim }]}>
+                    <Icon name="checkmark-circle" size={20} color="white" />
                     <Text style={styles.snackbarText}>{message}</Text>
                 </Animated.View>
             )}

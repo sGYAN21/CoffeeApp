@@ -28,18 +28,15 @@ const CartScreen = () => {
 
   return (
     <SafeAreaProvider style={styles.container}>
-      {/* 1. Set background to transparent so the status bar icons (battery/network) show up */}
+
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
       
-      {/* 2. SafeAreaView handles the top notch/status bar padding automatically */}
       <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
         
-        {/* 3. Header is now INSIDE SafeAreaView to prevent overlapping the battery icons */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Order Details</Text>
         </View>
 
-        {/* 4. Combined "Proceed to Buy" button logic */}
         {cartItems.length > 0 && (
           <View style={styles.topButtonContainer}>
             <TouchableOpacity style={styles.checkoutButton} activeOpacity={0.8}>

@@ -11,10 +11,12 @@ import SignupScreen from '../auth/SignUp/SignUpScreen';
 import SignInScreen from '../auth/SignIn/SignInScreen';
 import ForgetPassword from '../auth/ForgetPassword/ForgetPassword';
 import ProfileScreen from '../screens/ProfileScreen';
-import Favourite from '../screens/Favourite';
-import Cart from '../screens/Cart';
+import Favourite from '../screens/FavouriteScreen';
+import Cart from '../screens/CartScreen';
 import { View } from 'react-native';
 import SplashScreen from '../screens/SplashScreen';
+import FavouriteScreen from '../screens/FavouriteScreen';
+import CartScreen from '../screens/CartScreen';
 
 
 export type RootStackParamList = {
@@ -78,8 +80,8 @@ function HomeTabs() {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Favourite" component={Favourite} />
-      <Tab.Screen name="Cart" component={Cart} />
+      <Tab.Screen name="Favourite" component={FavouriteScreen} />
+      <Tab.Screen name="Cart" component={CartScreen} />
     </Tab.Navigator>
   );
 }
