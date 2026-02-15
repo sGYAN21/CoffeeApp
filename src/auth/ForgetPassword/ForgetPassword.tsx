@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { AuthStackParamList } from '../types';
+import { theme } from '../../constants';
 
 const bg_forget = require('../../assets/forgetPassword.png');
 
@@ -130,7 +131,7 @@ const ForgetPassword = () => {
 
                                 <View style={styles.otpHeader}>
                                     <TouchableOpacity onPress={handleResendOtp} disabled={timer > 0}>
-                                        <Text style={[styles.resendText, timer === 0 && { color: '#5D4037', fontWeight: 'bold' }]}>
+                                        <Text style={[styles.resendText, timer === 0 && { color: theme.primary, fontWeight: 'bold' }]}>
                                             {timer > 0 ? `Resend in ${formatTime(timer)}` : "Resend OTP"}
                                         </Text>
                                     </TouchableOpacity>
@@ -198,7 +199,7 @@ const ForgetPassword = () => {
                                 color: '#666'
                             }}>
                                 Are You rememberd password? <Text style={{
-                                    color: '#5D4037',
+                                    color: theme.primary,
                                     fontWeight: 'bold'
                                 }}>Sign In</Text>
                             </Text>
@@ -213,7 +214,7 @@ const ForgetPassword = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#5D4037'
+        backgroundColor: theme.primary
     },
     header: {
         alignItems: 'center',
@@ -267,7 +268,7 @@ const styles = StyleSheet.create({
         marginTop: -10
     },
     sendOtpText: {
-        color: '#5D4037',
+        color: theme.primary,
         fontWeight: '600',
         fontSize: 14
     },
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     resendText: {
-        color: '#5D4037',
+        color: theme.primary,
         fontSize: 13
     },
     otpRow: {
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
         color: '#888'
     },
     verifyBtn: {
-        backgroundColor: '#5D4037',
+        backgroundColor: theme.primary,
         height: 55,
         borderRadius: 30,
         alignItems: 'center',

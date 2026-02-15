@@ -6,15 +6,18 @@ import {
     TouchableOpacity,
     ScrollView,
     Image,
+    StatusBar,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import man from '../assets/icons/man.png'
 import woman from '../assets/icons/woman.png'
 import { SignOut } from '../services/firebase';
+import { theme } from '../constants';
 const ProfileItem = ({ icon, label, showBorder = true }: { icon: string, label: string, showBorder?: boolean }) => (
     <TouchableOpacity style={[styles.menuItem, showBorder && styles.borderBottom]}>
         <View style={styles.menuItemContent}>
@@ -28,30 +31,28 @@ const ProfileItem = ({ icon, label, showBorder = true }: { icon: string, label: 
 const ProfileScreen = () => {
     const navigation = useNavigation<any>();
     const handleLogout = async () => {
-    try {
-      await SignOut();
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'signin' }],
-      });
-    } catch (error: any) {
-      console.log(error.message);
-    }
-  };
+        try {
+            await SignOut();
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'signin' }],
+            });
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    };
     return (
         <SafeAreaProvider>
+            <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
             <SafeAreaView style={styles.container} edges={['top']}>
                 <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
                     <View style={styles.headerBackground}>
                         <View style={styles.btnContainer}>
-                            <TouchableOpacity style={styles.backBtn}
-                                onPress={() => navigation.goBack()}
-                            >
-                                <FontAwesome name="chevron-left" size={25} color='#fff' />
-
+                            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+                                <Icon name="chevron-back" size={24} color="white" />
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.signoutBtn}  onPress={handleLogout}>
+                            <TouchableOpacity style={styles.signoutBtn} onPress={handleLogout}>
                                 <FontAwesome name="sign-out" size={22} color='#fff' />
                             </TouchableOpacity>
                         </View>
@@ -130,25 +131,29 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#5D4037',
+        backgroundColor: theme.primary,
     },
     scrollContent: {
         flexGrow: 1,
         backgroundColor: '#fff',
     },
     headerBackground: {
-        height: 120,
-        backgroundColor: '#5D4037',
+        height: 130,
+        backgroundColor: theme.primary,
     },
-    btnContainer:{
-flexDirection: 'row', 
-justifyContent: 'space-between', 
-alignItems: 'center' 
+    btnContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 15,
     },
     backBtn: {
         marginLeft: 20,
-        marginTop: 10,
-        padding: 5,
+        padding: 10,
+        borderRadius: 25,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.3)',
     },
     signoutBtn: {
         marginRight: 25,

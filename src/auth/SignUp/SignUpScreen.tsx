@@ -19,6 +19,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../types';
 import { emailPasswordSignUp } from '../../services/firebase';
 import bg_signup from '../../assets/signup_img.png'
+import { theme } from '../../constants';
 type SignupNavProp = NativeStackNavigationProp<AuthStackParamList, 'signup'>;
 
 const SignupScreen = () => {
@@ -141,7 +142,7 @@ export default SignupScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#5D4037',
+    backgroundColor: theme.primary,
   },
   header: {
     justifyContent: 'center',
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#5D4037',
+    backgroundColor: theme.primary,
     height: 50,
     borderRadius: 10,
     justifyContent: 'center',
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     color: '#444',
   },
   link: {
-    color: '#5D4037',
+    color: theme.primary,
     fontWeight: 'bold',
   },
 });

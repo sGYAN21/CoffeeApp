@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
-import { Item } from '../constants';
+import { Item, theme } from '../constants';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -17,6 +17,7 @@ import { View } from 'react-native';
 import SplashScreen from '../screens/SplashScreen';
 import FavouriteScreen from '../screens/FavouriteScreen';
 import CartScreen from '../screens/CartScreen';
+import GetStartedScreen from '../screens/GetStarted/GetStartedScreen';
 
 
 export type RootStackParamList = {
@@ -35,6 +36,7 @@ export default function AppNavigation() {
            <Stack.Screen name="splashScreen" component={SplashScreen} />
          <Stack.Screen name="signin" component={SignInScreen} />
          <Stack.Screen name="signup" component={SignupScreen} />
+         <Stack.Screen name="getstarted" component={GetStartedScreen} />
          <Stack.Screen name="forgetpassword" component={ForgetPassword} />
          {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
         <Stack.Screen name="MainTabs" component={HomeTabs} />
@@ -54,10 +56,10 @@ function HomeTabs() {
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: '#EDEDED',
         tabBarStyle: {
-          backgroundColor: '#C67C4E',
-          height: 64,
+          backgroundColor: theme.secondary,
+          height: 55,
           position: 'absolute',
-          bottom: 25,
+          bottom: 20,
           marginHorizontal: 20,
           borderRadius: 35,
           borderTopWidth: 0,

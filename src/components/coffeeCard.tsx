@@ -43,12 +43,12 @@ const CoffeeCard: React.FC<Props> = ({ item }) => {
     e.stopPropagation();
 
     if (isInCart) {
-      // Remove if already there
+
       dispatch(removeFromCart({ id: item.id, type: item.type }));
       showSnackbar(`${item.name} removed from cart`);
     } else {
-      // Add if not there
-      const itemToAdd: CartItem = { ...item, quantity: 1,selected:false };
+
+      const itemToAdd: CartItem = { ...item, quantity: 1, selected: false };
       dispatch(addToCart(itemToAdd));
       showSnackbar(`${item.name} added to cart!`);
     }
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   cardInner: {
-    backgroundColor: '#5D4037',
+    backgroundColor: '#3C2A21',
     width: '100%',
     height: '80%',
     borderRadius: 40,
@@ -138,7 +138,12 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   content: { marginBottom: 10 },
-  name: { fontSize: 28, fontWeight: 'bold', color: theme.white, marginBottom: 5 },
+  name: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: theme.white,
+    marginBottom: 5
+  },
   ratingRow: {
     flexDirection: 'row',
     alignItems: 'center',

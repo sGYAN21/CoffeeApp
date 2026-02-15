@@ -5,6 +5,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../auth/types';
 import LoadingIndicator from '../components/LoadingIndicator';
+import { theme } from '../constants';
 type SplashNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'splashScreen'>;
 
 const SplashScreen = () => {
@@ -36,11 +37,11 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#2C1B12" barStyle="light-content" />
+      <StatusBar backgroundColor={theme.primary} barStyle="light-content" />
       <View style={styles.brandContainer}>
         <Text style={styles.logo}>Coffee Paglu</Text>
         {/* <Text style={styles.tagline}>Sip. Scan. Repeat. ☕</Text> */}
-        <Text style={styles.tagline}>First coffee. Then everything else ☕</Text>
+        <Text style={styles.tagline}>From sunrise coffee ☕ to midnight mojitos 🍸</Text>
 
       </View>
       <View style={styles.loaderContainer}>
@@ -56,7 +57,7 @@ export default SplashScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#2C1B12',
+    backgroundColor: theme.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },

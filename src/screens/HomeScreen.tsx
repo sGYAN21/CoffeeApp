@@ -7,7 +7,8 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  ImageBackground
+  ImageBackground,
+  StatusBar
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { theme, categories, coffeeItems, juiceItems, liquorItems,mocktailItems, subCategories, } from '../constants';
@@ -52,7 +53,7 @@ const HomeScreen: React.FC = () => {
   
   return (
     <SafeAreaProvider style={styles.container}>
-
+          <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <ImageBackground
         source={backgroundImg}
         style={styles.bgImage}
@@ -247,7 +248,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 25,
     marginRight: 10,
-    backgroundColor: '#EDEDED'
+    backgroundColor: '#EDEDED',
+    alignSelf: 'center'
   },
   activeCategoryBtn: {
     backgroundColor: theme.primary
@@ -261,7 +263,7 @@ const styles = StyleSheet.create({
   },
   cardListContainer: {
     flex: 1,
-    marginTop: 5,
+    marginTop: 1,
   },
   emptyContainer: {
     width: width - 40,
