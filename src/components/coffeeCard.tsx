@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -6,9 +7,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useSnackbar } from '../context/SnackbarContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTofavourite, removeFromfavourite } from '../store/slices/favouriteSlice';
-import { addToCart, removeFromCart, } from '../store/slices/cartSlice';
-import { CartItem } from '../store/slices/cartSlice';
+import { addToCart, removeFromCart, ItemSize } from '../store/slices/cartSlice';
 import { RootState } from '../store/store';
+
 const { width } = Dimensions.get('window');
 
 interface Props {
@@ -20,41 +21,65 @@ const CoffeeCard: React.FC<Props> = ({ item }) => {
   const dispatch = useDispatch();
   const { showSnackbar } = useSnackbar();
 
-  const isFavorite = useSelector((state: RootState) =>
-    state.favorites.items.some((fav) => fav.id === item.id && fav.type === item.type)
+  // --- Logic to find Lowest Price and Volume ---
+  const getLowestPriceDetails = () => {
+    // Convert the price object into an array of [size, priceValue]
+    const priceEntries = Object.entries(item.price) as [ItemSize, string][];
+    
+    // Find the entry with the minimum price
+    const lowestEntry = priceEntries.reduce((min, current) => {
+      return Number(current[1]) < Number(min[1]) ? current : min;
+    });
+
+    const lowestSize = lowestEntry[0];
+    const lowestPrice = lowestEntry[1];
+    const correspondingVolume = item.volume[lowestSize];
+
+    return { lowestPrice, correspondingVolume, lowestSize };
+  };
+
+  const { lowestPrice, correspondingVolume, lowestSize } = getLowestPriceDetails();
+
+  // --- Selectors ---
+  const isfavourite = useSelector((state: RootState) =>
+    state.favourite.items.some((fav) => fav.id === item.id && fav.type === item.type)
   );
+
+  // For the "isInCart" check on the main card, we check if ANY size of this item is in cart
   const isInCart = useSelector((state: RootState) =>
     state.cart.items.some((cartItem) => cartItem.id === item.id && cartItem.type === item.type)
   );
-  const handleFavoritePress = (e: any) => {
-    e.stopPropagation();
 
-    if (isFavorite) {
+  const handlefavouritePress = (e: any) => {
+    e.stopPropagation();
+    if (isfavourite) {
       dispatch(removeFromfavourite({ id: item.id, type: item.type }));
-      showSnackbar(`${item.name} removed from favorites`);
+      showSnackbar(`${item.name} removed from favourites`);
     } else {
       dispatch(addTofavourite(item));
-      showSnackbar(`${item.name} added to favorites!`);
+      showSnackbar(`${item.name} added to favourites!`);
     }
   };
 
   const handleCartPress = (e: any) => {
     e.stopPropagation();
-    e.stopPropagation();
-
     if (isInCart) {
-
-      dispatch(removeFromCart({ id: item.id, type: item.type }));
+      // For simplicity on the main card, we remove the lowest-priced variant if toggled off
+      dispatch(removeFromCart({ id: item.id, type: item.type, size: lowestSize }));
       showSnackbar(`${item.name} removed from cart`);
     } else {
-
-      const itemToAdd: CartItem = { ...item, quantity: 1, selected: false };
-      dispatch(addToCart(itemToAdd));
-      showSnackbar(`${item.name} added to cart!`);
+      // Defaulting to the lowest priced size (e.g., Small) when clicking '+' on the main card
+      dispatch(addToCart({ 
+        ...item,
+        selectedSize: lowestSize,
+        quantity: 1,
+        selected: true,
+      }));
+      showSnackbar(`${item.name} (${lowestSize}) added to cart!`);
     }
   };
-  return (
 
+  return (
     <TouchableOpacity
       activeOpacity={1}
       onPress={() => navigation.navigate('ProductDetails', { item })}
@@ -67,35 +92,38 @@ const CoffeeCard: React.FC<Props> = ({ item }) => {
         />
 
         <View style={styles.content}>
-          <Text style={styles.name}>{item.name}</Text>
+          <Text style={styles.name} numberOfLines={1}>{item.name}</Text>
 
           <View style={styles.ratingRow}>
             <Icon name="star" size={14} color="#E7A13D" />
             <Text style={styles.ratingText}>{item.rating}</Text>
           </View>
 
+          {/* Displaying Lowest Volume */}
           <Text style={styles.volumeText}>
-            Volume <Text style={{ fontWeight: 'bold' }}>{item.volume}</Text>
+            From <Text style={{ fontWeight: 'bold' }}>{correspondingVolume}</Text>
           </Text>
 
           <View style={styles.footer}>
-            <Text style={styles.price}>$ {item.price}</Text>
+            {/* Displaying Lowest Price */}
+            <Text style={styles.price}>$ {lowestPrice}</Text>
 
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
               <TouchableOpacity
-                onPress={handleFavoritePress}
+                onPress={handlefavouritePress}
                 style={styles.addButton}
               >
                 <Icon
-                  name={isFavorite ? "heart" : "heart-outline"}
-                  size={24}
-                  color={isFavorite ? "#E74C3C" : "black"}
+                  name={isfavourite ? "heart" : "heart-outline"}
+                  size={22}
+                  color={isfavourite ? "#E74C3C" : "black"}
                 />
               </TouchableOpacity>
+              
               <TouchableOpacity onPress={handleCartPress} style={styles.addButton}>
                 <Icon
                   name={isInCart ? "checkmark-circle" : "add"}
-                  size={24}
+                  size={22}
                   color={isInCart ? "#4CAF50" : "black"}
                 />
               </TouchableOpacity>
@@ -109,8 +137,8 @@ const CoffeeCard: React.FC<Props> = ({ item }) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: width * 0.7,
-    height: 450,
+    width: width * 0.65,
+    height: 420,
     alignItems: 'center',
     justifyContent: 'flex-end',
     marginRight: 20,
@@ -120,7 +148,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '80%',
     borderRadius: 40,
-    padding: 25,
+    padding: 20,
     justifyContent: 'flex-end',
     elevation: 8,
     shadowColor: '#000',
@@ -129,19 +157,19 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   image: {
-    width: 180,
-    height: 180,
-    borderRadius: 90,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
     position: 'absolute',
-    top: -60,
+    top: -50,
     alignSelf: 'center',
     zIndex: 10,
   },
-  content: { marginBottom: 10 },
+  content: { marginBottom: 5 },
   name: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: theme.white,
+    color: 'white',
     marginBottom: 5
   },
   ratingRow: {
@@ -149,18 +177,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.15)',
     alignSelf: 'flex-start',
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 20,
-    marginBottom: 10,
+    marginBottom: 8,
   },
-  ratingText: { color: theme.white, marginLeft: 5, fontSize: 14 },
-  volumeText: { color: '#D1D1D1', fontSize: 16, marginBottom: 15 },
+  ratingText: { color: 'white', marginLeft: 5, fontSize: 12 },
+  volumeText: { color: '#D1D1D1', fontSize: 14, marginBottom: 12 },
   footer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  price: { color: theme.white, fontSize: 24, fontWeight: 'bold' },
+  price: { color: 'white', fontSize: 22, fontWeight: 'bold' },
   addButton: {
-    backgroundColor: theme.white,
-    padding: 7,
+    backgroundColor: 'white',
+    padding: 8,
     borderRadius: 50,
   },
 });

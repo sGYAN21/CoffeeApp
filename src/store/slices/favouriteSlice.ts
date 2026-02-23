@@ -10,16 +10,17 @@ const initialState: favouriteState = {
 };
 
 export const favouriteSlice = createSlice({
-    name: 'favourite ',
+    name: 'favourite',
     initialState,
     reducers: {
-        addTofavourite: (state, action: PayloadAction<Item>) => {
-            const exists = state.items.find(item => item.id === action.payload.id);
+     addTofavourite: (state, action: PayloadAction<Item>) => {
+            const exists = state.items.find(
+                item => item.id === action.payload.id && item.type === action.payload.type
+            );
             if (!exists) {
                 state.items.push(action.payload);
             }
         },
-
         removeFromfavourite: (state, action: PayloadAction<{ id: number; type: string }>) => {
             state.items = state.items.filter(
                 (item) => !(item.id === action.payload.id && item.type === action.payload.type)

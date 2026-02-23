@@ -1,22 +1,20 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/Home/HomeScreen';
 import { Item, theme } from '../constants';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
-import ProductScreen from '../screens/ProductScreen';
+import ProductScreen from '../screens/Product/ProductScreen';
 import SignupScreen from '../auth/SignUp/SignUpScreen';
 import SignInScreen from '../auth/SignIn/SignInScreen';
 import ForgetPassword from '../auth/ForgetPassword/ForgetPassword';
-import ProfileScreen from '../screens/ProfileScreen';
-import Favourite from '../screens/FavouriteScreen';
-import Cart from '../screens/CartScreen';
+import ProfileScreen from '../screens/Profile/ProfileScreen';
 import { View } from 'react-native';
-import SplashScreen from '../screens/SplashScreen';
-import FavouriteScreen from '../screens/FavouriteScreen';
-import CartScreen from '../screens/CartScreen';
+import SplashScreen from '../screens/SplashScreen/SplashScreen';
+import FavouriteScreen from '../screens/Favourite/FavouriteScreen';
+import CartScreen from '../screens/Cart/CartScreen';
 import GetStartedScreen from '../screens/GetStarted/GetStartedScreen';
 
 

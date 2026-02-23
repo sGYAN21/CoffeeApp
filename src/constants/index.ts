@@ -44,16 +44,48 @@ import watermelonMojito from '../assets/mocktails/watermelonMojito.webp';
 import peachIcedTea from '../assets/mocktails/peachIcedTea.webp';
 import strawberryLemonade from '../assets/mocktails/strawberryLemonade.webp';
 import greenAppleFizz from '../assets/mocktails/greenAppleFizz.webp';
+// shakes
+import chocolateShake from '../assets/shakes/chocolateShake.webp';
+import vanillaShake from '../assets/shakes/vanillaShake.webp';
+import strawberryShake from '../assets/shakes/strawberryShake.webp';
+import mangoShake from '../assets/shakes/mangoShake.webp';
+import oreoShake from '../assets/shakes/oreoShake.webp';
+import kitkatShake from '../assets/shakes/kitkatShake.webp';
+import bananaShake from '../assets/shakes/bananaShake.webp';
+import coldCoffeeShake from '../assets/shakes/coldCoffeeShake.webp';  
+import dryFruitShake from '../assets/shakes/dryFruitShake.webp';
+import peanutButterShake from '../assets/shakes/peanutButterShake.webp';
+
+
+// export interface Item {
+//   id: number;
+//   name: string;
+//   price: string;
+//   volume: string;
+//   rating: string;
+//   image: ImageSourcePropType;
+//   description: string;
+//   type: 'Coffee' | 'Juice' | 'liquor' | 'Mocktails';
+//   category: string;
+// }
 
 export interface Item {
   id: number;
   name: string;
-  price: string;
-  volume: string;
+  price: {
+    small: string;
+    medium: string;
+    large: string;
+  };
+  volume: {
+    small: string;
+    medium: string;
+    large: string;
+  };
   rating: string;
   image: ImageSourcePropType;
   description: string;
-  type: 'Coffee' | 'Juice' | 'liquor' | 'Mocktails';
+  type: 'Coffee' | 'Juice' | 'Liquor' | 'Mocktails' | 'Shake';
   category: string;
 }
 
@@ -66,21 +98,22 @@ export const theme = {
   white: '#FFFFFF',
 };
 
-export const categories: string[] = ['Coffee', 'Juice', 'liquor','Mocktails' ];
+export const categories: string[] = ['Coffee', 'Juice','Mocktails','Shake' ];
 
 export const subCategories: Record<string, string[]> = {
   'Coffee': ['All','Cappuccino', 'Latte', 'Espresso', 'Mocha'],
   'Juice': ['All','Orange', 'Apple', 'Mango', 'Pineapple'],
-  'liquor': ['All','Whiskey', 'Vodka', 'Beer', 'Rum', 'Wine'],
+  // 'liquor': ['All','Whiskey', 'Vodka', 'Beer', 'Rum', 'Wine'],
   'Mocktails': ['All','Virgin Mojito', 'Shirley Temple', 'Pina Colada'],
+  'Shake': ['All','Chocolate', 'Vanilla', 'Strawberry', 'Mango'],
 };
 
 export const coffeeItems: Item[] = [
   {
     id: 1,
     name: 'Espresso',
-    price: '30.00',
-    volume: '100 ml',
+    price: { small: '25.00', medium: '30.00', large: '35.00' },
+    volume: { small: '80 ml', medium: '100 ml', large: '120 ml' },
     rating: '4.0',
     image: espresso,
     description: 'A strong and bold shot of pure coffee with a rich aroma and intense flavor.',
@@ -90,8 +123,8 @@ export const coffeeItems: Item[] = [
   {
     id: 2,
     name: 'Latte',
-    price: '35.00',
-    volume: '200 ml',
+    price: { small: '30.00', medium: '35.00', large: '40.00' },
+    volume: { small: '150 ml', medium: '200 ml', large: '250 ml' },
     rating: '4.5',
     image: latte,
     description: 'Smooth espresso mixed with steamed milk and topped with a light layer of foam.',
@@ -101,8 +134,8 @@ export const coffeeItems: Item[] = [
   {
     id: 3,
     name: 'Cappuccino',
-    price: '40.00',
-    volume: '180 ml',
+    price: { small: '35.00', medium: '40.00', large: '45.00' },
+    volume: { small: '140 ml', medium: '180 ml', large: '220 ml' },
     rating: '4.6',
     image: cappuccino,
     description: 'A balanced blend of espresso, steamed milk, and thick milk foam.',
@@ -112,8 +145,8 @@ export const coffeeItems: Item[] = [
   {
     id: 4,
     name: 'Americano',
-    price: '28.00',
-    volume: '220 ml',
+    price: { small: '22.00', medium: '28.00', large: '32.00' },
+    volume: { small: '180 ml', medium: '220 ml', large: '260 ml' },
     rating: '4.2',
     image: americano,
     description: 'Espresso diluted with hot water for a smooth and light coffee experience.',
@@ -123,8 +156,8 @@ export const coffeeItems: Item[] = [
   {
     id: 5,
     name: 'Mocha',
-    price: '45.00',
-    volume: '200 ml',
+    price: { small: '38.00', medium: '45.00', large: '50.00' },
+    volume: { small: '160 ml', medium: '200 ml', large: '250 ml' },
     rating: '4.7',
     image: mocha,
     description: 'A delicious mix of espresso, chocolate syrup, and steamed milk.',
@@ -134,8 +167,8 @@ export const coffeeItems: Item[] = [
   {
     id: 6,
     name: 'Flat White',
-    price: '38.00',
-    volume: '160 ml',
+    price: { small: '32.00', medium: '38.00', large: '42.00' },
+    volume: { small: '130 ml', medium: '160 ml', large: '200 ml' },
     rating: '4.3',
     image: flatwhite,
     description: 'Rich espresso combined with velvety steamed milk and minimal foam.',
@@ -145,8 +178,8 @@ export const coffeeItems: Item[] = [
   {
     id: 7,
     name: 'Macchiato',
-    price: '32.00',
-    volume: '120 ml',
+    price: { small: '26.00', medium: '32.00', large: '36.00' },
+    volume: { small: '90 ml', medium: '120 ml', large: '150 ml' },
     rating: '4.1',
     image: macchiato,
     description: 'Espresso marked with a small amount of milk foam for a bold taste.',
@@ -156,8 +189,8 @@ export const coffeeItems: Item[] = [
   {
     id: 8,
     name: 'Irish Coffee',
-    price: '50.00',
-    volume: '250 ml',
+    price: { small: '42.00', medium: '50.00', large: '55.00' },
+    volume: { small: '200 ml', medium: '250 ml', large: '300 ml' },
     rating: '4.8',
     image: irish,
     description: 'Hot coffee blended with Irish whiskey and topped with fresh cream.',
@@ -167,8 +200,8 @@ export const coffeeItems: Item[] = [
   {
     id: 9,
     name: 'Cold Brew',
-    price: '42.00',
-    volume: '300 ml',
+    price: { small: '35.00', medium: '42.00', large: '48.00' },
+    volume: { small: '220 ml', medium: '300 ml', large: '350 ml' },
     rating: '4.4',
     image: cold_brew,
     description: 'Slow-brewed cold coffee with a smooth, refreshing, and less acidic taste.',
@@ -178,8 +211,8 @@ export const coffeeItems: Item[] = [
   {
     id: 10,
     name: 'Affogato',
-    price: '48.00',
-    volume: '150 ml',
+    price: { small: '40.00', medium: '48.00', large: '55.00' },
+    volume: { small: '120 ml', medium: '150 ml', large: '180 ml' },
     rating: '4.9',
     image: affogato,
     description: 'A delightful dessert coffee with hot espresso poured over vanilla ice cream.',
@@ -192,8 +225,8 @@ export const juiceItems: Item[] = [
   {
     id: 1,
     name: 'Orange Juice',
-    price: '60',
-    volume: '250 ml',
+    price: { small: '45', medium: '60', large: '75' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.5',
     image: orange,
     description: 'Freshly squeezed oranges with natural sweetness.',
@@ -203,8 +236,8 @@ export const juiceItems: Item[] = [
   {
     id: 2,
     name: 'Apple Juice',
-    price: '55',
-    volume: '250 ml',
+    price: { small: '40', medium: '55', large: '70' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.3',
     image: apple,
     description: 'Crisp and refreshing apple juice.',
@@ -214,8 +247,8 @@ export const juiceItems: Item[] = [
   {
     id: 3,
     name: 'Mango Juice',
-    price: '70',
-    volume: '300 ml',
+    price: { small: '55', medium: '70', large: '90' },
+    volume: { small: '220 ml', medium: '300 ml', large: '400 ml' },
     rating: '4.7',
     image: mango,
     description: 'Rich and pulpy mango delight.',
@@ -225,8 +258,8 @@ export const juiceItems: Item[] = [
   {
     id: 4,
     name: 'Pineapple Juice',
-    price: '65',
-    volume: '250 ml',
+    price: { small: '50', medium: '65', large: '80' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.4',
     image: pineapple,
     description: 'Tangy pineapple juice with tropical flavor.',
@@ -236,8 +269,8 @@ export const juiceItems: Item[] = [
   {
     id: 5,
     name: 'Watermelon Juice',
-    price: '50',
-    volume: '300 ml',
+    price: { small: '35', medium: '50', large: '65' },
+    volume: { small: '250 ml', medium: '300 ml', large: '400 ml' },
     rating: '4.2',
     image: watermelon,
     description: 'Light and hydrating watermelon juice.',
@@ -247,8 +280,8 @@ export const juiceItems: Item[] = [
   {
     id: 6,
     name: 'Pomegranate Juice',
-    price: '80',
-    volume: '250 ml',
+    price: { small: '60', medium: '80', large: '100' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.6',
     image: pomegranate,
     description: 'Antioxidant-rich pomegranate juice.',
@@ -258,8 +291,8 @@ export const juiceItems: Item[] = [
   {
     id: 7,
     name: 'Mixed Fruit Juice',
-    price: '75',
-    volume: '300 ml',
+    price: { small: '55', medium: '75', large: '95' },
+    volume: { small: '220 ml', medium: '300 ml', large: '400 ml' },
     rating: '4.5',
     image: mixedFruit,
     description: 'Blend of fresh seasonal fruits.',
@@ -269,8 +302,8 @@ export const juiceItems: Item[] = [
   {
     id: 8,
     name: 'Grape Juice',
-    price: '60',
-    volume: '250 ml',
+    price: { small: '45', medium: '60', large: '75' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.3',
     image: grape,
     description: 'Sweet and juicy grape extract.',
@@ -280,8 +313,8 @@ export const juiceItems: Item[] = [
   {
     id: 9,
     name: 'Carrot Juice',
-    price: '55',
-    volume: '250 ml',
+    price: { small: '40', medium: '55', large: '70' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.1',
     image: carrot,
     description: 'Healthy carrot juice rich in vitamins.',
@@ -291,8 +324,8 @@ export const juiceItems: Item[] = [
   {
     id: 10,
     name: 'Beetroot Juice',
-    price: '60',
-    volume: '250 ml',
+    price: { small: '45', medium: '60', large: '75' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.0',
     image: beetroot,
     description: 'Natural detox beetroot juice.',
@@ -305,111 +338,111 @@ export const liquorItems: Item[] = [
   {
     id: 1,
     name: 'Jack Daniels',
-    price: '45',
-    volume: '750 ml',
+    price: { small: '18', medium: '30', large: '45' },
+    volume: { small: '180 ml', medium: '375 ml', large: '750 ml' },
     rating: '4.8',
     image: jackDaniels,
     description: 'Classic Tennessee whiskey with a smooth smoky finish.',
-    type: 'liquor',
+    type: 'Liquor',
     category: 'Whiskey',
   },
   {
     id: 2,
     name: 'Jameson Whiskey',
-    price: '40',
-    volume: '750 ml',
+    price: { small: '16', medium: '28', large: '40' },
+    volume: { small: '180 ml', medium: '375 ml', large: '750 ml' },
     rating: '4.7',
     image: jameson,
     description: 'Smooth Irish whiskey with hints of vanilla and spice.',
-    type: 'liquor',
+    type: 'Liquor',
     category: 'Whiskey',
   },
   {
     id: 3,
     name: 'Absolut Vodka',
-    price: '32',
-    volume: '750 ml',
+    price: { small: '14', medium: '24', large: '32' },
+    volume: { small: '180 ml', medium: '375 ml', large: '750 ml' },
     rating: '4.6',
     image: absolut,
     description: 'Premium Swedish vodka with a clean and crisp taste.',
-    type: 'liquor',
+    type: 'Liquor',
     category: 'Vodka',
   },
   {
     id: 4,
     name: 'Smirnoff Red',
-    price: '28',
-    volume: '750 ml',
+    price: { small: '12', medium: '20', large: '28' },
+    volume: { small: '180 ml', medium: '375 ml', large: '750 ml' },
     rating: '4.5',
     image: smirnoff,
     description: 'Triple distilled vodka, smooth and versatile.',
-    type: 'liquor',
+    type: 'Liquor',
     category: 'Vodka',
   },
   {
     id: 5,
     name: 'Bira White',
-    price: '6',
-    volume: '330 ml',
+    price: { small: '4', medium: '6', large: '8' },
+    volume: { small: '200 ml', medium: '330 ml', large: '500 ml' },
     rating: '4.4',
     image: bira,
     description: 'Refreshing wheat beer with citrus notes.',
-    type: 'liquor',
+    type: 'Liquor',
     category: 'Beer',
   },
   {
     id: 6,
     name: 'Kingfisher Premium',
-    price: '5',
-    volume: '330 ml',
+    price: { small: '3', medium: '5', large: '7' },
+    volume: { small: '200 ml', medium: '330 ml', large: '500 ml' },
     rating: '4.3',
     image: kingfisher,
     description: 'India’s most loved premium lager beer.',
-    type: 'liquor',
+    type: 'Liquor',
     category: 'Beer',
   },
   {
     id: 7,
     name: 'Bacardi White Rum',
-    price: '30',
-    volume: '750 ml',
+    price: { small: '12', medium: '22', large: '30' },
+    volume: { small: '180 ml', medium: '375 ml', large: '750 ml' },
     rating: '4.5',
     image: bacardi,
     description: 'Light and smooth white rum for classic cocktails.',
-    type: 'liquor',
+    type: 'Liquor',
     category: 'Rum',
   },
   {
     id: 8,
     name: 'Old Monk',
-    price: '22',
-    volume: '750 ml',
+    price: { small: '10', medium: '16', large: '22' },
+    volume: { small: '180 ml', medium: '375 ml', large: '750 ml' },
     rating: '4.8',
     image: oldMonk,
     description: 'Iconic dark rum with rich vanilla flavor.',
-    type: 'liquor',
+    type: 'Liquor',
     category: 'Rum',
   },
   {
     id: 9,
     name: 'Sula Sauvignon Blanc',
-    price: '18',
-    volume: '750 ml',
+    price: { small: '8', medium: '13', large: '18' },
+    volume: { small: '180 ml', medium: '375 ml', large: '750 ml' },
     rating: '4.4',
     image: sula,
     description: 'Crisp white wine with tropical fruit notes.',
-    type: 'liquor',
+    type: 'Liquor',
     category: 'Wine',
   },
   {
     id: 10,
     name: 'Jacobs Creek Shiraz',
-    price: '20',
-    volume: '750 ml',
+    price: { small: '9', medium: '15', large: '20' },
+    volume: { small: '180 ml', medium: '375 ml', large: '750 ml' },
     rating: '4.6',
     image: jacobsCreek,
     description: 'Bold red wine with rich berry flavors.',
-    type: 'liquor',
+    type: 'Liquor',
     category: 'Wine',
   },
 ];
@@ -418,8 +451,8 @@ export const mocktailItems: Item[] = [
   {
     id: 1,
     name: 'Virgin Mojito',
-    price: '45.00',
-    volume: '250 ml',
+    price: { small: '35.00', medium: '45.00', large: '55.00' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.6',
     image: virginMojito,
     description: 'Refreshing mix of lime, mint, sugar, and soda water.',
@@ -429,8 +462,8 @@ export const mocktailItems: Item[] = [
   {
     id: 2,
     name: 'Shirley Temple',
-    price: '40.00',
-    volume: '250 ml',
+    price: { small: '30.00', medium: '40.00', large: '50.00' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.4',
     image: shirleyTemple,
     description: 'Sweet blend of ginger ale and grenadine with a cherry twist.',
@@ -440,8 +473,8 @@ export const mocktailItems: Item[] = [
   {
     id: 3,
     name: 'Virgin Pina Colada',
-    price: '50.00',
-    volume: '300 ml',
+    price: { small: '40.00', medium: '50.00', large: '65.00' },
+    volume: { small: '220 ml', medium: '300 ml', large: '400 ml' },
     rating: '4.7',
     image: pinaColada,
     description: 'Creamy pineapple and coconut mocktail served chilled.',
@@ -451,8 +484,8 @@ export const mocktailItems: Item[] = [
   {
     id: 4,
     name: 'Blue Lagoon',
-    price: '48.00',
-    volume: '250 ml',
+    price: { small: '38.00', medium: '48.00', large: '60.00' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.5',
     image: blueLagoon,
     description: 'Cool and citrusy blue mocktail with lemon flavors.',
@@ -462,8 +495,8 @@ export const mocktailItems: Item[] = [
   {
     id: 5,
     name: 'Fruit Punch',
-    price: '42.00',
-    volume: '300 ml',
+    price: { small: '32.00', medium: '42.00', large: '55.00' },
+    volume: { small: '220 ml', medium: '300 ml', large: '400 ml' },
     rating: '4.3',
     image: fruitPunch,
     description: 'A colorful mix of fresh fruit juices and soda.',
@@ -473,8 +506,8 @@ export const mocktailItems: Item[] = [
   {
     id: 6,
     name: 'Mint Cooler',
-    price: '38.00',
-    volume: '250 ml',
+    price: { small: '28.00', medium: '38.00', large: '48.00' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.2',
     image: mintCooler,
     description: 'Chilled mint, lime, and soda for instant freshness.',
@@ -484,8 +517,8 @@ export const mocktailItems: Item[] = [
   {
     id: 7,
     name: 'Watermelon Mojito',
-    price: '46.00',
-    volume: '300 ml',
+    price: { small: '36.00', medium: '46.00', large: '58.00' },
+    volume: { small: '220 ml', medium: '300 ml', large: '400 ml' },
     rating: '4.6',
     image: watermelonMojito,
     description: 'Juicy watermelon blended with mint and lime.',
@@ -495,8 +528,8 @@ export const mocktailItems: Item[] = [
   {
     id: 8,
     name: 'Peach Iced Tea',
-    price: '44.00',
-    volume: '300 ml',
+    price: { small: '34.00', medium: '44.00', large: '56.00' },
+    volume: { small: '220 ml', medium: '300 ml', large: '400 ml' },
     rating: '4.4',
     image: peachIcedTea,
     description: 'Smooth iced tea infused with peach flavors.',
@@ -506,8 +539,8 @@ export const mocktailItems: Item[] = [
   {
     id: 9,
     name: 'Strawberry Lemonade',
-    price: '43.00',
-    volume: '250 ml',
+    price: { small: '33.00', medium: '43.00', large: '55.00' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.5',
     image: strawberryLemonade,
     description: 'Sweet strawberries mixed with tangy lemonade.',
@@ -517,13 +550,125 @@ export const mocktailItems: Item[] = [
   {
     id: 10,
     name: 'Green Apple Fizz',
-    price: '47.00',
-    volume: '250 ml',
+    price: { small: '37.00', medium: '47.00', large: '60.00' },
+    volume: { small: '200 ml', medium: '250 ml', large: '350 ml' },
     rating: '4.6',
     image: greenAppleFizz,
     description: 'Crisp green apple juice topped with sparkling soda.',
     type: 'Mocktails',
     category: 'Special',
+  },
+];
+export const shakeItems: Item[] = [
+  {
+    id: 1,
+    name: 'Chocolate Shake',
+    price: { small: '4', medium: '6', large: '8' },
+    volume: { small: '250 ml', medium: '350 ml', large: '500 ml' },
+    rating: '4.7',
+    image: chocolateShake,
+    description: 'Rich and creamy chocolate milkshake.',
+    type: 'Shake',
+    category: 'Chocolate',
+  },
+  {
+    id: 2,
+    name: 'Vanilla Shake',
+    price: { small: '4', medium: '6', large: '8' },
+    volume: { small: '250 ml', medium: '350 ml', large: '500 ml' },
+    rating: '4.5',
+    image: vanillaShake,
+    description: 'Classic vanilla shake with smooth texture.',
+    type: 'Shake',
+    category: 'Classic',
+  },
+  {
+    id: 3,
+    name: 'Strawberry Shake',
+    price: { small: '5', medium: '7', large: '9' },
+    volume: { small: '250 ml', medium: '350 ml', large: '500 ml' },
+    rating: '4.6',
+    image: strawberryShake,
+    description: 'Fresh strawberry blended with creamy milk.',
+    type: 'Shake',
+    category: 'Fruit',
+  },
+  {
+    id: 4,
+    name: 'Mango Shake',
+    price: { small: '5', medium: '7', large: '9' },
+    volume: { small: '250 ml', medium: '350 ml', large: '500 ml' },
+    rating: '4.8',
+    image: mangoShake,
+    description: 'Seasonal mango shake made from real mango pulp.',
+    type: 'Shake',
+    category: 'Fruit',
+  },
+  {
+    id: 5,
+    name: 'Oreo Shake',
+    price: { small: '6', medium: '8', large: '10' },
+    volume: { small: '250 ml', medium: '350 ml', large: '500 ml' },
+    rating: '4.9',
+    image: oreoShake,
+    description: 'Creamy Oreo shake topped with cookie crunch.',
+    type: 'Shake',
+    category: 'Chocolate',
+  },
+  {
+    id: 6,
+    name: 'KitKat Shake',
+    price: { small: '6', medium: '8', large: '10' },
+    volume: { small: '250 ml', medium: '350 ml', large: '500 ml' },
+    rating: '4.8',
+    image: kitkatShake,
+    description: 'Chocolatey KitKat shake with wafer bits.',
+    type: 'Shake',
+    category: 'Chocolate',
+  },
+  {
+    id: 7,
+    name: 'Banana Shake',
+    price: { small: '4', medium: '6', large: '8' },
+    volume: { small: '250 ml', medium: '350 ml', large: '500 ml' },
+    rating: '4.4',
+    image: bananaShake,
+    description: 'Healthy banana shake rich in energy.',
+    type: 'Shake',
+    category: 'Healthy',
+  },
+  {
+    id: 8,
+    name: 'Dry Fruit Shake',
+    price: { small: '7', medium: '10', large: '13' },
+    volume: { small: '250 ml', medium: '350 ml', large: '500 ml' },
+    rating: '4.6',
+    image: dryFruitShake,
+    description: 'Premium shake loaded with mixed dry fruits.',
+    type: 'Shake',
+    category: 'Premium',
+  },
+  {
+    id: 9,
+    name: 'Peanut Butter Shake',
+    price: { small: '6', medium: '9', large: '12' },
+    volume: { small: '250 ml', medium: '350 ml', large: '500 ml' },
+    rating: '4.5',
+    image: peanutButterShake,
+    description: 'Protein-rich peanut butter shake.',
+    type: 'Shake',
+    category: 'Protein',
+  },
+  {
+    id: 10,
+    name: 'Cold Coffee Shake',
+    price: { small: '5', medium: '7', large: '9' },
+    volume: { small: '250 ml', medium: '350 ml', large: '500 ml' },
+    rating: '4.7',
+    image: coldCoffeeShake,
+    description: 'Chilled coffee shake with rich aroma.',
+    type: 'Shake',
+    category: 'Coffee',
   },
 ];
 

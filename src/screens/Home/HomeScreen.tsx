@@ -11,9 +11,9 @@ import {
   StatusBar
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { theme, categories, coffeeItems, juiceItems, liquorItems,mocktailItems, subCategories, } from '../constants';
-import CoffeeCard from '../components/coffeeCard';
-import backgroundImg from '../assets/background.png';
+import { theme, categories, coffeeItems, juiceItems,mocktailItems, subCategories, shakeItems, } from '../../constants/index';
+import CoffeeCard from '../../components/coffeeCard';
+import backgroundImg from '../../assets/background.png';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -24,7 +24,7 @@ const HomeScreen: React.FC = () => {
   const [mainCategory, setMainCategory] = useState<string>('Coffee');
   const [activeCategory, setActiveCategory] = useState<string>('All');
   
-  const allData = useMemo(() => [...coffeeItems, ...juiceItems, ...liquorItems, ...mocktailItems], []);
+  const allData = useMemo(() => [...coffeeItems, ...juiceItems, ...mocktailItems,...shakeItems], []);
 
   const currentSubCategories = useMemo(() => {
     return subCategories[mainCategory] || ['All'];

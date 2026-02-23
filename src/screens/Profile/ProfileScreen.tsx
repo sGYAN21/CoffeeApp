@@ -14,10 +14,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import man from '../assets/icons/man.png'
-import woman from '../assets/icons/woman.png'
-import { SignOut } from '../services/firebase';
-import { theme } from '../constants';
+import man from '../../assets/icons/man.png'
+import woman from '../../assets/icons/woman.png'
+import { SignOut } from '../../services/firebase';
+import { theme } from '../../constants';
 const ProfileItem = ({ icon, label, showBorder = true }: { icon: string, label: string, showBorder?: boolean }) => (
     <TouchableOpacity style={[styles.menuItem, showBorder && styles.borderBottom]}>
         <View style={styles.menuItemContent}>

@@ -10,9 +10,9 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { RootState } from '../store/store';
-import { addToCart, decrementQuantity, removeFromCart } from '../store/slices/cartSlice';
-import CartItem from '../components/CartCard';
+import { RootState } from '../../store/store';
+import { addToCart, decrementQuantity, removeFromCart } from '../../store/slices/cartSlice';
+import CartItem from '../../components/CartCard';
 
 const CartScreen = () => {
   const dispatch = useDispatch();
@@ -50,13 +50,13 @@ const CartScreen = () => {
 
         <FlatList
           data={cartItems}
-          keyExtractor={(item) => `${item.id}-${item.type}`}
+          keyExtractor={(item) => `${item.id}-${item.type}-${item.selectedSize}`}
           renderItem={({ item }) => (
             <CartItem
               item={item}
               onIncrement={() => dispatch(addToCart(item))}
-              onDecrement={() => dispatch(decrementQuantity({ id: item.id, type: item.type }))}
-              onRemove={() => dispatch(removeFromCart({ id: item.id, type: item.type }))}
+              onDecrement={() => dispatch(decrementQuantity({ id: item.id, type: item.type,size: item.selectedSize }))}
+              onRemove={() => dispatch(removeFromCart({ id: item.id, type: item.type,size: item.selectedSize }))}
             />
           )}
           ListEmptyComponent={renderEmptyCart}

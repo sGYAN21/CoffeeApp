@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+
+import React from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Item } from '../constants/index';
-import { toggleItemSelection } from '../store/slices/cartSlice';
 import { useDispatch } from 'react-redux';
+import { toggleItemSelection, CartItem } from '../store/slices/cartSlice';
 
 interface CartCardProps {
-  item: Item & { quantity: number; selected: boolean}; // Merging your type with quantity from Redux
+  // Use the CartItem type from your slice to include selectedSize, quantity, and selected
+  item: CartItem; 
   onIncrement: () => void;
   onDecrement: () => void;
   onRemove: () => void;
@@ -14,37 +15,55 @@ interface CartCardProps {
 
 const CartCard: React.FC<CartCardProps> = ({ item, onIncrement, onDecrement, onRemove }) => {
   const dispatch = useDispatch();
-  const [isSelected, setIsSelected] = useState(true);
+
+  // Get price and volume for the SPECIFIC size selected for this cart entry
+  const displayPrice = item.price[item.selectedSize];
+  const displayVolume = item.volume[item.selectedSize];
+  
+  // Calculate total for this specific row (price * quantity)
+  const lineTotal = (Number(displayPrice) * item.quantity).toFixed(2);
 
   const toggleCheckbox = () => {
-    // setIsSelected(!isSelected);
-    dispatch(toggleItemSelection({ id: item.id, type: item.type }));
-    // Note: You should ideally pass this up to your parent/Redux 
-    // to subtract the price from the final total.
+    // Pass id, type, AND size to uniquely identify this item in the cart
+    dispatch(toggleItemSelection({ 
+      id: item.id, 
+      type: item.type, 
+      size: item.selectedSize 
+    }));
   };
+
   return (
     <View style={[styles.card, !item.selected && styles.fadedCard]}>
-      <View style={{}}>
-
+      <View>
         <Image source={item.image} style={styles.image} resizeMode="cover" />
       </View>
 
       <View style={styles.infoContainer}>
         <View style={styles.headerRow}>
-        <View style={{flex:1}}>
-          <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
-          <Text style={styles.itemType}>{item.type} | {item.volume}</Text>
-
-        </View>
-        <TouchableOpacity onPress={toggleCheckbox} style={styles.checkIcon}>
-          <Icon
-            name={item.selected ? "checkbox" : "square-outline"}
-            size={25}
-            color="#C67C4E"
-            />
-        </TouchableOpacity>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
+            {/* Show specific size and volume for this selected item */}
+            <Text style={styles.itemType}>
+              {item.selectedSize.charAt(0).toUpperCase() + item.selectedSize.slice(1)} | {displayVolume}
+            </Text>
           </View>
-        <Text style={styles.itemPrice}>${item.price}</Text>
+          
+          <TouchableOpacity onPress={toggleCheckbox} style={styles.checkIcon}>
+            <Icon
+              name={item.selected ? "checkbox" : "square-outline"}
+              size={25}
+              color="#C67C4E"
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* Display the unit price and the calculated line total */}
+        <View style={styles.priceRow}>
+          <Text style={styles.itemPrice}>${displayPrice}</Text>
+          {item.quantity > 1 && (
+             <Text style={styles.lineTotal}> (Total: ${lineTotal})</Text>
+          )}
+        </View>
 
         <View style={styles.actionRow}>
           <TouchableOpacity onPress={onRemove}>
@@ -57,7 +76,7 @@ const CartCard: React.FC<CartCardProps> = ({ item, onIncrement, onDecrement, onR
         </View>
       </View>
 
-      {/* Modern Quantity Selector */}
+      {/* Quantity Selector */}
       <View style={styles.qtyWrapper}>
         <TouchableOpacity onPress={onDecrement} style={styles.qtyBtn}>
           <Icon name="remove" size={16} color="#2F2D2C" />
@@ -80,6 +99,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   fadedCard: {
     opacity: 0.5,
@@ -91,32 +115,42 @@ const styles = StyleSheet.create({
   },
   checkIcon: {
     marginLeft: 8,
-    marginTop: -15,
+    marginTop: -5,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 90,
+    height: 90,
     borderRadius: 12
   },
   infoContainer: {
     flex: 1,
     marginLeft: 12,
-    height: 85,
+    minHeight: 90,
     justifyContent: 'space-between'
   },
   itemName: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#2F2D2C'
   },
   itemType: {
     fontSize: 12,
-    color: '#9B9B9B'
+    color: '#9B9B9B',
+    marginTop: 2
+  },
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   itemPrice: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#2F2D2C'
+  },
+  lineTotal: {
+    fontSize: 12,
+    color: '#C67C4E',
+    fontWeight: '500'
   },
   actionRow: {
     flexDirection: 'row',
@@ -135,7 +169,7 @@ const styles = StyleSheet.create({
   qtyWrapper: {
     position: 'absolute',
     right: 12,
-    bottom: 45,
+    bottom: 12, // Adjusted to fit nicely
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F9F9F9',
@@ -144,7 +178,12 @@ const styles = StyleSheet.create({
     borderColor: '#EDEDED',
   },
   qtyBtn: { padding: 6 },
-  qtyNumber: { paddingHorizontal: 4, fontWeight: '600', minWidth: 20, textAlign: 'center' },
+  qtyNumber: { 
+    paddingHorizontal: 8, 
+    fontWeight: '600', 
+    minWidth: 25, 
+    textAlign: 'center' 
+  },
 });
 
 export default CartCard;
