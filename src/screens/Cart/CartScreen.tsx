@@ -11,14 +11,29 @@ import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { RootState } from '../../store/store';
-import { addToCart, decrementQuantity, removeFromCart } from '../../store/slices/cartSlice';
-import CartItem from '../../components/CartCard';
+import { addToCart, decrementQuantity, ItemSize, removeFromCart } from '../../store/slices/cartSlice';
+import CartItem from './components/CartCard';
+import { useNavigation } from '@react-navigation/native';
+import { deleteDoc, doc, getFirestore } from '@react-native-firebase/firestore';
+import { useSnackbar } from '../../context/SnackbarContext';
+import { useCartActions } from '../../hooks/useCartActions';
 
 const CartScreen = () => {
   const dispatch = useDispatch();
+    const { showSnackbar } = useSnackbar();
+  const navigation = useNavigation<any>();
+   const {  removeItemFromCart, } = useCartActions();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const total = useSelector((state: RootState) => state.cart.totalPrice);
 
+  const userId = useSelector((state: RootState) => state.auth.user?.uid);
+
+  const handlePress = () => {
+    navigation.navigate('PlaceOrder');
+  };
+  const handleDelete = async (itemId: string | number,name:string, type: string, size: ItemSize) => {
+   removeItemFromCart(itemId ,name, type, size);
+  };
   const renderEmptyCart = () => (
     <View style={styles.emptyContainer}>
       <Icon name="cart-outline" size={80} color="#DEDEDE" />
@@ -28,18 +43,18 @@ const CartScreen = () => {
 
   return (
     <SafeAreaProvider style={styles.container}>
-
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
-      
       <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
         
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Order Details</Text>
+          <Text style={styles.headerTitle}>Cart Details</Text>
         </View>
 
         {cartItems.length > 0 && (
           <View style={styles.topButtonContainer}>
-            <TouchableOpacity style={styles.checkoutButton} activeOpacity={0.8}>
+            <TouchableOpacity style={styles.checkoutButton} activeOpacity={0.8}
+         onPress={handlePress}
+            >
               <Text style={styles.checkoutText}>
                 Proceed to Buy ({cartItems.length} items)
               </Text>
@@ -56,7 +71,7 @@ const CartScreen = () => {
               item={item}
               onIncrement={() => dispatch(addToCart(item))}
               onDecrement={() => dispatch(decrementQuantity({ id: item.id, type: item.type,size: item.selectedSize }))}
-              onRemove={() => dispatch(removeFromCart({ id: item.id, type: item.type,size: item.selectedSize }))}
+              onRemove={() => handleDelete(item.id,item.name, item.type, item.selectedSize)}
             />
           )}
           ListEmptyComponent={renderEmptyCart}

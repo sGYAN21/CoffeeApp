@@ -1,14 +1,13 @@
-
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { theme, Item } from '../constants';
+import { Item } from '../../../constants';
 import { useNavigation } from '@react-navigation/native';
-import { useSnackbar } from '../context/SnackbarContext';
-import { useDispatch, useSelector } from 'react-redux';
-import { addTofavourite, removeFromfavourite } from '../store/slices/favouriteSlice';
-import { addToCart, removeFromCart, ItemSize } from '../store/slices/cartSlice';
-import { RootState } from '../store/store';
+import { useSelector } from 'react-redux';
+import { ItemSize } from '../../../store/slices/cartSlice';
+import { RootState } from '../../../store/store';
+import { useCartActions } from '../../../hooks/useCartActions';
+import { useFavouriteActions } from '../../../hooks/useFavouriteActions';
 
 const { width } = Dimensions.get('window');
 
@@ -18,64 +17,52 @@ interface Props {
 
 const CoffeeCard: React.FC<Props> = ({ item }) => {
   const navigation = useNavigation<any>();
-  const dispatch = useDispatch();
-  const { showSnackbar } = useSnackbar();
+  
+  // Centralized Hooks
+  const { addItemToCart, removeItemFromCart, isSyncing: cartSyncing } = useCartActions();
+  const { addFavourite, removeSingleFavourite } = useFavouriteActions();
 
-  // --- Logic to find Lowest Price and Volume ---
-  const getLowestPriceDetails = () => {
-    // Convert the price object into an array of [size, priceValue]
-    const priceEntries = Object.entries(item.price) as [ItemSize, string][];
-    
-    // Find the entry with the minimum price
-    const lowestEntry = priceEntries.reduce((min, current) => {
-      return Number(current[1]) < Number(min[1]) ? current : min;
-    });
 
-    const lowestSize = lowestEntry[0];
-    const lowestPrice = lowestEntry[1];
-    const correspondingVolume = item.volume[lowestSize];
-
-    return { lowestPrice, correspondingVolume, lowestSize };
-  };
-
-  const { lowestPrice, correspondingVolume, lowestSize } = getLowestPriceDetails();
+  const defaultSize: ItemSize = 'small';
+  const displayPrice = item.price[defaultSize] || "0";
+  const displayVolume = item.volume[defaultSize] || "0";
 
   // --- Selectors ---
-  const isfavourite = useSelector((state: RootState) =>
-    state.favourite.items.some((fav) => fav.id === item.id && fav.type === item.type)
+  const isFavourite = useSelector((state: RootState) =>
+    state.favourite.items.some(
+      (favItem) =>
+        String(favItem.id) === String(item.id) && 
+        favItem.type === item.type
+    )
   );
 
-  // For the "isInCart" check on the main card, we check if ANY size of this item is in cart
   const isInCart = useSelector((state: RootState) =>
-    state.cart.items.some((cartItem) => cartItem.id === item.id && cartItem.type === item.type)
+    state.cart.items.some(
+      (cartItem) =>
+        String(cartItem.id) === String(item.id) &&
+        cartItem.selectedSize === defaultSize
+    )
   );
 
+  // --- Handlers ---
   const handlefavouritePress = (e: any) => {
-    e.stopPropagation();
-    if (isfavourite) {
-      dispatch(removeFromfavourite({ id: item.id, type: item.type }));
-      showSnackbar(`${item.name} removed from favourites`);
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (isFavourite) {
+      removeSingleFavourite(item.id, item.name, item.type);
     } else {
-      dispatch(addTofavourite(item));
-      showSnackbar(`${item.name} added to favourites!`);
+      addFavourite(item);
     }
   };
 
   const handleCartPress = (e: any) => {
-    e.stopPropagation();
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (cartSyncing) return;
+
     if (isInCart) {
-      // For simplicity on the main card, we remove the lowest-priced variant if toggled off
-      dispatch(removeFromCart({ id: item.id, type: item.type, size: lowestSize }));
-      showSnackbar(`${item.name} removed from cart`);
+      removeItemFromCart(item.id, item.name, item.type, defaultSize);
     } else {
-      // Defaulting to the lowest priced size (e.g., Small) when clicking '+' on the main card
-      dispatch(addToCart({ 
-        ...item,
-        selectedSize: lowestSize,
-        quantity: 1,
-        selected: true,
-      }));
-      showSnackbar(`${item.name} (${lowestSize}) added to cart!`);
+      
+      addItemToCart(item, defaultSize, 1);
     }
   };
 
@@ -94,19 +81,24 @@ const CoffeeCard: React.FC<Props> = ({ item }) => {
         <View style={styles.content}>
           <Text style={styles.name} numberOfLines={1}>{item.name}</Text>
 
-          <View style={styles.ratingRow}>
-            <Icon name="star" size={14} color="#E7A13D" />
-            <Text style={styles.ratingText}>{item.rating}</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={[styles.ratingRow, { marginBottom: 5 }]}>
+              <Icon name="star" size={14} color="#E7A13D" />
+              <Text style={styles.ratingText}>{item.rating || 0}</Text>
+            </View>
+            <View style={{ marginBottom: 3 }}>
+              <Text style={styles.categoryText}>{item.category} | {item.type}</Text>
+            </View>
           </View>
 
-          {/* Displaying Lowest Volume */}
+          {/* Displaying Small Volume */}
           <Text style={styles.volumeText}>
-            From <Text style={{ fontWeight: 'bold' }}>{correspondingVolume}</Text>
+            Size: <Text style={{ fontWeight: 'bold' }}>{displayVolume} ml</Text>
           </Text>
 
           <View style={styles.footer}>
-            {/* Displaying Lowest Price */}
-            <Text style={styles.price}>$ {lowestPrice}</Text>
+            {/* Displaying Small Price */}
+            <Text style={styles.price}>$ {displayPrice}</Text>
 
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
               <TouchableOpacity
@@ -114,13 +106,17 @@ const CoffeeCard: React.FC<Props> = ({ item }) => {
                 style={styles.addButton}
               >
                 <Icon
-                  name={isfavourite ? "heart" : "heart-outline"}
+                  name={isFavourite ? "heart" : "heart-outline"}
                   size={22}
-                  color={isfavourite ? "#E74C3C" : "black"}
+                  color={isFavourite ? "#E74C3C" : "black"}
                 />
               </TouchableOpacity>
-              
-              <TouchableOpacity onPress={handleCartPress} style={styles.addButton}>
+
+              <TouchableOpacity 
+                onPress={handleCartPress} 
+                style={styles.addButton}
+                disabled={cartSyncing}
+              >
                 <Icon
                   name={isInCart ? "checkmark-circle" : "add"}
                   size={22}
@@ -138,7 +134,7 @@ const CoffeeCard: React.FC<Props> = ({ item }) => {
 const styles = StyleSheet.create({
   cardContainer: {
     width: width * 0.65,
-    height: 420,
+    height: 410,
     alignItems: 'center',
     justifyContent: 'flex-end',
     marginRight: 20,
@@ -171,6 +167,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     marginBottom: 5
+  },
+  categoryText: {
+    fontSize: 14,
+    color: '#fff',
+    marginBottom: 5,
+    textTransform: 'capitalize'
   },
   ratingRow: {
     flexDirection: 'row',

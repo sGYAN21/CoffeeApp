@@ -16,44 +16,70 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { theme } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 import imageBack from '../../assets/productBack.webp';
-import { useDispatch } from 'react-redux';
-import { useSnackbar } from '../../context/SnackbarContext';
-import { addToCart, ItemSize } from '../../store/slices/cartSlice';
+import { ItemSize } from '../../store/slices/cartSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
-const { width, height } = Dimensions.get('window');
+import { useCartActions } from '../../hooks/useCartActions';
+import { useFavouriteActions } from '../../hooks/useFavouriteActions';
+const { height } = Dimensions.get('window');
 const sizes: { label: string; value: ItemSize }[] = [
   { label: 'Small', value: 'small' },
   { label: 'Medium', value: 'medium' },
   { label: 'Large', value: 'large' },
 ];
 const ProductScreen = ({ route }: any) => {
+
+  const formatName = (name: string) => {
+    if (!name) return '';
+    return name
+      .replace(/_/g, ' ')
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
   const { item }: any = route.params || {};
   const navigation = useNavigation<any>();
+  const { addItemToCart } = useCartActions();
   const insets = useSafeAreaInsets();
 
-  const dispatch = useDispatch();
-  const { showSnackbar } = useSnackbar();
+  const { addFavourite, removeSingleFavourite, } = useFavouriteActions();
   const [selectedSize, setSelectedSize] = useState<ItemSize>('small');
   const [quantity, setQuantity] = useState(1);
 
+
+  const isFavourite = useSelector((state: RootState) => {
+    const found = state.favourite.items.some(
+      (favItem) =>
+        String(favItem.id) === String(item.id) &&
+        favItem.type === item.type
+    );
+    return found;
+  });
+
   const currentPrice = item.price[selectedSize];
   const currentVolume = item.volume[selectedSize];
-  const handleAddToCart = () => {
 
-    dispatch(addToCart({
-      ...item,
-      selectedSize: selectedSize,
-      size: selectedSize,
-      quantity: quantity,
-      selected: true,
-    }));
-    showSnackbar(`${quantity} ${item.name} (${selectedSize}) added to cart`);
+
+  const handleBuyNow = () => {
+    navigation.navigate('PlaceOrder');
+  };
+  
+  const handleAddToCart = () => {
+    addItemToCart(item, selectedSize, quantity);
+  };
+
+  const handlefavouritePress = (e: any) => {
+    e.stopPropagation();
+    if (isFavourite) {
+      removeSingleFavourite(item.id, item.name, item.type);
+    } else {
+      addFavourite(item);
+    }
   };
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
-
- 
         <ImageBackground
           source={imageBack}
           style={[styles.headerBg, { paddingTop: insets.top }]}
@@ -64,15 +90,22 @@ const ProductScreen = ({ route }: any) => {
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.roundBtn}>
               <Icon name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.roundBtn}>
-              <Icon name="heart" size={24} color="white" />
+            <TouchableOpacity
+              style={styles.roundBtn}
+              onPress={handlefavouritePress}
+            >
+              <Icon
+                name={isFavourite ? "heart" : "heart-outline"}
+                size={23}
+                color={isFavourite ? "#E74C3C" : "#fff"}
+              />
             </TouchableOpacity>
           </View>
 
           {/* Overlapping Coffee Image centered in header */}
           <View style={styles.imageContainer}>
             <Image
-              source={item.image}
+              source={{ uri: item.image }}
               style={styles.mainImage}
             />
           </View>
@@ -90,7 +123,7 @@ const ProductScreen = ({ route }: any) => {
             <Text style={styles.price}>$ {currentPrice}</Text>
           </View>
 
-          <Text style={styles.sectionTitle}>Coffee size</Text>
+          <Text style={styles.sectionTitle}>{formatName(item.category)} size</Text>
 
           <FlatList
             data={sizes}
@@ -119,7 +152,7 @@ const ProductScreen = ({ route }: any) => {
           </Text>
 
           <View style={styles.volumeRow}>
-            <Text style={styles.volumeLabel}>Volume <Text style={{ fontWeight: 'bold' }}>{currentVolume}</Text></Text>
+            <Text style={[styles.volumeLabel, { color: '#2F2D2C', }]}>Volume {"  "}<Text style={{ fontWeight: 'semibold' }}>{currentVolume} ml</Text></Text>
 
             <View style={styles.quantityContainer}>
               <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))} style={styles.qtyBtn}>
@@ -142,7 +175,7 @@ const ProductScreen = ({ route }: any) => {
         >
           <Icon name="basket-outline" size={28} color="#9B9B9B" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buyNowBtn}>
+        <TouchableOpacity style={styles.buyNowBtn} onPress={handleBuyNow}>
           <Text style={styles.buyNowText}>Buy now</Text>
         </TouchableOpacity>
       </View>
@@ -216,8 +249,8 @@ const styles = StyleSheet.create({
     color: '#2F2D2C'
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 17,
+    fontWeight: '600',
     color: '#2F2D2C',
     marginTop: 15
   },
@@ -256,7 +289,7 @@ const styles = StyleSheet.create({
   },
   volumeLabel: {
     fontSize: 16,
-    color: '#9B9B9B'
+    fontWeight: '700',
   },
   quantityContainer: {
     flexDirection: 'row',

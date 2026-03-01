@@ -16,6 +16,7 @@ import SplashScreen from '../screens/SplashScreen/SplashScreen';
 import FavouriteScreen from '../screens/Favourite/FavouriteScreen';
 import CartScreen from '../screens/Cart/CartScreen';
 import GetStartedScreen from '../screens/GetStarted/GetStartedScreen';
+import PlaceOrderScreen from '../screens/PlaceOrder/PlaceOrderScreen';
 
 
 export type RootStackParamList = {
@@ -40,6 +41,7 @@ export default function AppNavigation() {
         <Stack.Screen name="MainTabs" component={HomeTabs} />
         <Stack.Screen name="ProductDetails" component={ProductScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="PlaceOrder" component={PlaceOrderScreen} />
       </Stack.Navigator>
     </NavigationContainer>
     </View>

@@ -3,8 +3,8 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch } from 'react-redux';
-import { toggleItemSelection, CartItem } from '../store/slices/cartSlice';
-
+import { toggleItemSelection, CartItem } from '../../../store/slices/cartSlice';
+import { useNavigation } from '@react-navigation/native';
 interface CartCardProps {
   // Use the CartItem type from your slice to include selectedSize, quantity, and selected
   item: CartItem; 
@@ -15,6 +15,7 @@ interface CartCardProps {
 
 const CartCard: React.FC<CartCardProps> = ({ item, onIncrement, onDecrement, onRemove }) => {
   const dispatch = useDispatch();
+  const navigation = useNavigation<any>();
 
   // Get price and volume for the SPECIFIC size selected for this cart entry
   const displayPrice = item.price[item.selectedSize];
@@ -22,7 +23,12 @@ const CartCard: React.FC<CartCardProps> = ({ item, onIncrement, onDecrement, onR
   
   // Calculate total for this specific row (price * quantity)
   const lineTotal = (Number(displayPrice) * item.quantity).toFixed(2);
-
+const handlePress = () => {
+    navigation.navigate('ProductDetails', { 
+      item: item, 
+      category: item.category 
+    });
+  };
   const toggleCheckbox = () => {
     // Pass id, type, AND size to uniquely identify this item in the cart
     dispatch(toggleItemSelection({ 
@@ -34,8 +40,14 @@ const CartCard: React.FC<CartCardProps> = ({ item, onIncrement, onDecrement, onR
 
   return (
     <View style={[styles.card, !item.selected && styles.fadedCard]}>
+      <TouchableOpacity 
+        style={styles.clickableArea} 
+        onPress={handlePress} 
+        activeOpacity={0.7}
+        
+      >
       <View>
-        <Image source={item.image} style={styles.image} resizeMode="cover" />
+        <Image source={{ uri: item.image }} style={styles.image} resizeMode="cover" />
       </View>
 
       <View style={styles.infoContainer}>
@@ -44,10 +56,9 @@ const CartCard: React.FC<CartCardProps> = ({ item, onIncrement, onDecrement, onR
             <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
             {/* Show specific size and volume for this selected item */}
             <Text style={styles.itemType}>
-              {item.selectedSize.charAt(0).toUpperCase() + item.selectedSize.slice(1)} | {displayVolume}
+              {item.selectedSize.charAt(0).toUpperCase() + item.selectedSize.slice(1)} | {displayVolume} ml
             </Text>
-          </View>
-          
+          </View>     
           <TouchableOpacity onPress={toggleCheckbox} style={styles.checkIcon}>
             <Icon
               name={item.selected ? "checkbox" : "square-outline"}
@@ -75,7 +86,7 @@ const CartCard: React.FC<CartCardProps> = ({ item, onIncrement, onDecrement, onR
           </TouchableOpacity>
         </View>
       </View>
-
+</TouchableOpacity>
       {/* Quantity Selector */}
       <View style={styles.qtyWrapper}>
         <TouchableOpacity onPress={onDecrement} style={styles.qtyBtn}>
@@ -107,6 +118,11 @@ const styles = StyleSheet.create({
   },
   fadedCard: {
     opacity: 0.5,
+  },
+  clickableArea: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
   },
   headerRow: {
     flexDirection: 'row',

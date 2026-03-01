@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -8,49 +8,76 @@ import {
   TouchableOpacity,
   Dimensions,
   ImageBackground,
-  StatusBar
+  StatusBar,
+  ActivityIndicator
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { theme, categories, coffeeItems, juiceItems,mocktailItems, subCategories, shakeItems, } from '../../constants/index';
-import CoffeeCard from '../../components/coffeeCard';
+import { theme, } from '../../constants/index';
+import CoffeeCard from './components/coffeeCard';
 import backgroundImg from '../../assets/background.png';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 const { width, height } = Dimensions.get('window');
+
+import { productCategories, products } from './Model/product';
 
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation<any>();
-  const [mainCategory, setMainCategory] = useState<string>('Coffee');
-  const [activeCategory, setActiveCategory] = useState<string>('All');
-  
-  const allData = useMemo(() => [...coffeeItems, ...juiceItems, ...mocktailItems,...shakeItems], []);
 
-  const currentSubCategories = useMemo(() => {
-    return subCategories[mainCategory] || ['All'];
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const [mainCategory, setMainCategory] = useState<string>('');
+  const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [categories, setCategories] = useState<string[]>([]);
+  const [subCategories, setSubCategories] = useState<string[]>([]);
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const formatName = (name: string) => {
+    if (!name) return '';
+    return name
+      .replace(/_/g, ' ')
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
+useEffect(() => {
+    const loadInitialCategories = async () => {
+      const cats = await productCategories();
+      if (cats.length > 0) {
+        setCategories(cats);
+        setMainCategory(cats[0]);
+      }
+    };
+    loadInitialCategories();
+  }, []);
+
+  useEffect(() => {
+    if (!mainCategory) return;
+
+    const loadData = async () => {
+      setLoading(true);
+      const { items, individualNames } = await products(mainCategory);
+      
+      setItems(items);
+      setSubCategories(['All', ...individualNames]); 
+      setLoading(false);
+    };
+
+    loadData();
   }, [mainCategory]);
 
   const filteredItems = useMemo(() => {
-    return allData.filter(item => {
-
-      const typeMatch = item.type.toLowerCase() === mainCategory.toLowerCase();
-
-
-      const categoryMatch = 
-        activeCategory === 'All' || 
-        item.category === activeCategory || 
-        item.name.toLowerCase().includes(activeCategory.toLowerCase());
-
-      return typeMatch && categoryMatch;
+    return items.filter(item => {
+      return activeCategory === 'All' || item.name === activeCategory;
     });
-  }, [mainCategory, activeCategory, allData]);
-
+  }, [activeCategory, items]);
   const handleMainCategoryPress = (item: string) => {
     setMainCategory(item);
     setActiveCategory('All'); 
   }
-
-  
   return (
     <SafeAreaProvider style={styles.container}>
           <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
@@ -97,7 +124,7 @@ const HomeScreen: React.FC = () => {
                   style={[styles.mainCatBtn, mainCategory === item && styles.activeMainCatBtn]}
                 >
                   <Text style={[styles.mainCatText, mainCategory === item && styles.activeMainCatText]}>
-                    {item}
+                   {formatName(item)}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -112,7 +139,7 @@ const HomeScreen: React.FC = () => {
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={currentSubCategories} 
+            data={subCategories} 
             contentContainerStyle={{ paddingHorizontal: 20 }}
 
             keyExtractor={(item) => `sub-${mainCategory}-${item}`}
@@ -131,10 +158,12 @@ const HomeScreen: React.FC = () => {
 
         {/* Card List Area */}
         <View style={styles.cardListContainer}>
+          {loading?(<ActivityIndicator size="large" color={theme.primary} style={{ marginTop: 50 }} />):(
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
             data={filteredItems}
+            extraData={cartItems}
             keyExtractor={(item) => item.id.toString() + item.type}
             contentContainerStyle={{ paddingHorizontal: 20 }}
             renderItem={({ item }) => <CoffeeCard item={item} />}
@@ -147,6 +176,7 @@ const HomeScreen: React.FC = () => {
               </View>
             }
           />
+          )}
         </View>
       </View>
     </SafeAreaProvider>
