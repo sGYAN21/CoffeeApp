@@ -19,13 +19,16 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import auth from '@react-native-firebase/auth';
+import useUserProfile from '../../hooks/useUserProfile';
 const { width, height } = Dimensions.get('window');
 
 import { productCategories, products } from './Model/product';
 
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation<any>();
-
+  const userId = auth().currentUser?.uid;
+  const { userData } = useUserProfile(userId)
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [mainCategory, setMainCategory] = useState<string>('');
   const [activeCategory, setActiveCategory] = useState<string>('All');
@@ -43,7 +46,7 @@ const HomeScreen: React.FC = () => {
       .join(' ');
   };
 
-useEffect(() => {
+  useEffect(() => {
     const loadInitialCategories = async () => {
       const cats = await productCategories();
       if (cats.length > 0) {
@@ -60,9 +63,9 @@ useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       const { items, individualNames } = await products(mainCategory);
-      
+
       setItems(items);
-      setSubCategories(['All', ...individualNames]); 
+      setSubCategories(['All', ...individualNames]);
       setLoading(false);
     };
 
@@ -76,11 +79,11 @@ useEffect(() => {
   }, [activeCategory, items]);
   const handleMainCategoryPress = (item: string) => {
     setMainCategory(item);
-    setActiveCategory('All'); 
+    setActiveCategory('All');
   }
   return (
     <SafeAreaProvider style={styles.container}>
-          <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <ImageBackground
         source={backgroundImg}
         style={styles.bgImage}
@@ -90,11 +93,22 @@ useEffect(() => {
         <View style={styles.darkOverlay}>
           <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-              <Image source={{ uri: 'https://i.pravatar.cc/100' }} style={styles.avatar} />
+              {userData?.profileImageUrl ? (
+                <Image
+                  source={{ uri: userData.profileImageUrl }}
+                  style={styles.avatar}
+                />
+              ) : (
+                <View style={[styles.avatar, styles.fallbackContainer]}>
+                  <Text style={styles.fallbackText}>
+                    {userData?.userName ? userData.userName.charAt(0).toUpperCase() : '?'}
+                  </Text>
+                </View>
+              )}
             </TouchableOpacity>
 
             <View style={styles.locationContainer}>
-              <Icon name="location" size={18} color={theme.primary} />
+              <Icon name="location" size={18} color={theme.secondary} />
               <Text style={styles.locationText}>New York, NYC</Text>
             </View>
 
@@ -115,7 +129,7 @@ useEffect(() => {
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
-              data={categories} 
+              data={categories}
               contentContainerStyle={{ paddingHorizontal: 20 }}
               keyExtractor={(item) => item}
               renderItem={({ item }) => (
@@ -124,7 +138,7 @@ useEffect(() => {
                   style={[styles.mainCatBtn, mainCategory === item && styles.activeMainCatBtn]}
                 >
                   <Text style={[styles.mainCatText, mainCategory === item && styles.activeMainCatText]}>
-                   {formatName(item)}
+                    {formatName(item)}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -133,13 +147,13 @@ useEffect(() => {
         </View>
       </ImageBackground>
 
- <View style={styles.contentBody}>
+      <View style={styles.contentBody}>
 
         <View style={styles.subCategoryWrapper}>
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={subCategories} 
+            data={subCategories}
             contentContainerStyle={{ paddingHorizontal: 20 }}
 
             keyExtractor={(item) => `sub-${mainCategory}-${item}`}
@@ -158,24 +172,24 @@ useEffect(() => {
 
         {/* Card List Area */}
         <View style={styles.cardListContainer}>
-          {loading?(<ActivityIndicator size="large" color={theme.primary} style={{ marginTop: 50 }} />):(
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={filteredItems}
-            extraData={cartItems}
-            keyExtractor={(item) => item.id.toString() + item.type}
-            contentContainerStyle={{ paddingHorizontal: 20 }}
-            renderItem={({ item }) => <CoffeeCard item={item} />}
-            snapToInterval={width * 0.7 + 20}
-            decelerationRate="fast"
-            ListEmptyComponent={
-              <View style={styles.emptyContainer}>
-                <Icon name="cafe-outline" size={50} color="#ccc" />
-                <Text style={styles.emptyText}>No {activeCategory} items available</Text>
-              </View>
-            }
-          />
+          {loading ? (<ActivityIndicator size="large" color={theme.primary} style={{ marginTop: 50 }} />) : (
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={filteredItems}
+              extraData={cartItems}
+              keyExtractor={(item) => item.id.toString() + item.type}
+              contentContainerStyle={{ paddingHorizontal: 20 }}
+              renderItem={({ item }) => <CoffeeCard item={item} />}
+              snapToInterval={width * 0.7 + 20}
+              decelerationRate="fast"
+              ListEmptyComponent={
+                <View style={styles.emptyContainer}>
+                  <Icon name="cafe-outline" size={50} color="#ccc" />
+                  <Text style={styles.emptyText}>No {activeCategory} items available</Text>
+                </View>
+              }
+            />
           )}
         </View>
       </View>
@@ -189,7 +203,7 @@ const styles = StyleSheet.create({
   },
   bgImage: {
     width: width,
-    height: height / 3.5, 
+    height: height / 3.5,
     backgroundColor: '#000',
   },
   imageBrightness: {
@@ -213,6 +227,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'white'
   },
+  fallbackContainer: {
+    backgroundColor: '#D17842',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#FFF',
+  },
+  fallbackText: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#FFFFFF',
+    fontSize: 25,
+    fontWeight: 'semibold',
+  },
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center'
@@ -221,7 +249,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 5,
     fontSize: 16,
-    color: '#000'
+    color: '#EDEDED'
   },
   searchSection: {
     paddingHorizontal: 20,
@@ -301,9 +329,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  emptyText: { 
+  emptyText: {
     color: '#999',
-     marginTop: 10, 
-     fontSize: 16 }
+    marginTop: 10,
+    fontSize: 16
+  }
 });
 export default HomeScreen;

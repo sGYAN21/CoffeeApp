@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ActivityIndicator, StatusBar } from 'react-nati
 import { FirebaseAuthTypes, getAuth, onAuthStateChanged } from '@react-native-firebase/auth'; 
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../auth/types';
+import { AuthStackParamList } from '../../types/types';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import { theme } from '../../constants';
 type SplashNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'splashScreen'>;

@@ -1,13 +1,13 @@
-
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch } from 'react-redux';
 import { toggleItemSelection, CartItem } from '../../../store/slices/cartSlice';
 import { useNavigation } from '@react-navigation/native';
+
 interface CartCardProps {
-  // Use the CartItem type from your slice to include selectedSize, quantity, and selected
-  item: CartItem; 
+
+  item: CartItem;
   onIncrement: () => void;
   onDecrement: () => void;
   onRemove: () => void;
@@ -17,76 +17,75 @@ const CartCard: React.FC<CartCardProps> = ({ item, onIncrement, onDecrement, onR
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
 
-  // Get price and volume for the SPECIFIC size selected for this cart entry
   const displayPrice = item.price[item.selectedSize];
   const displayVolume = item.volume[item.selectedSize];
-  
+
   // Calculate total for this specific row (price * quantity)
   const lineTotal = (Number(displayPrice) * item.quantity).toFixed(2);
-const handlePress = () => {
-    navigation.navigate('ProductDetails', { 
-      item: item, 
-      category: item.category 
+  const handlePress = () => {
+    navigation.navigate('ProductDetails', {
+      item: item,
+      category: item.category
     });
   };
   const toggleCheckbox = () => {
     // Pass id, type, AND size to uniquely identify this item in the cart
-    dispatch(toggleItemSelection({ 
-      id: item.id, 
-      type: item.type, 
-      size: item.selectedSize 
+    dispatch(toggleItemSelection({
+      id: item.id,
+      type: item.type,
+      size: item.selectedSize
     }));
   };
 
   return (
     <View style={[styles.card, !item.selected && styles.fadedCard]}>
-      <TouchableOpacity 
-        style={styles.clickableArea} 
-        onPress={handlePress} 
+      <TouchableOpacity
+        style={styles.clickableArea}
+        onPress={handlePress}
         activeOpacity={0.7}
-        
-      >
-      <View>
-        <Image source={{ uri: item.image }} style={styles.image} resizeMode="cover" />
-      </View>
 
-      <View style={styles.infoContainer}>
-        <View style={styles.headerRow}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
-            {/* Show specific size and volume for this selected item */}
-            <Text style={styles.itemType}>
-              {item.selectedSize.charAt(0).toUpperCase() + item.selectedSize.slice(1)} | {displayVolume} ml
-            </Text>
-          </View>     
-          <TouchableOpacity onPress={toggleCheckbox} style={styles.checkIcon}>
-            <Icon
-              name={item.selected ? "checkbox" : "square-outline"}
-              size={25}
-              color="#C67C4E"
-            />
-          </TouchableOpacity>
+        >
+        <View>
+          <Image source={{ uri: typeof item.image === 'string' ? item.image : ''}} style={styles.image} resizeMode="cover" />
         </View>
 
-        {/* Display the unit price and the calculated line total */}
-        <View style={styles.priceRow}>
-          <Text style={styles.itemPrice}>${displayPrice}</Text>
-          {item.quantity > 1 && (
-             <Text style={styles.lineTotal}> (Total: ${lineTotal})</Text>
-          )}
-        </View>
+        <View style={styles.infoContainer}>
+          <View style={styles.headerRow}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
+              {/* Show specific size and volume for this selected item */}
+              <Text style={styles.itemType}>
+                {item.selectedSize.charAt(0).toUpperCase() + item.selectedSize.slice(1)} | {displayVolume} ml
+              </Text>
+            </View>
+            <TouchableOpacity onPress={toggleCheckbox} style={styles.checkIcon}>
+              <Icon
+                name={item.selected ? "checkbox" : "square-outline"}
+                size={25}
+                color="#C67C4E"
+              />
+            </TouchableOpacity>
+          </View>
 
-        <View style={styles.actionRow}>
-          <TouchableOpacity onPress={onRemove}>
-            <Text style={styles.actionText}>Delete</Text>
-          </TouchableOpacity>
-          <View style={styles.divider} />
-          <TouchableOpacity>
-            <Text style={styles.actionText}>Save for later</Text>
-          </TouchableOpacity>
+          {/* Display the unit price and the calculated line total */}
+          <View style={styles.priceRow}>
+            <Text style={styles.itemPrice}>${displayPrice}</Text>
+            {item.quantity > 1 && (
+              <Text style={styles.lineTotal}> (Total: ${lineTotal})</Text>
+            )}
+          </View>
+
+          <View style={styles.actionRow}>
+            <TouchableOpacity onPress={onRemove}>
+              <Text style={styles.actionText}>Delete</Text>
+            </TouchableOpacity>
+            <View style={styles.divider} />
+            <TouchableOpacity>
+              <Text style={styles.actionText}>Save for later</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-</TouchableOpacity>
+      </TouchableOpacity>
       {/* Quantity Selector */}
       <View style={styles.qtyWrapper}>
         <TouchableOpacity onPress={onDecrement} style={styles.qtyBtn}>
@@ -194,11 +193,11 @@ const styles = StyleSheet.create({
     borderColor: '#EDEDED',
   },
   qtyBtn: { padding: 6 },
-  qtyNumber: { 
-    paddingHorizontal: 8, 
-    fontWeight: '600', 
-    minWidth: 25, 
-    textAlign: 'center' 
+  qtyNumber: {
+    paddingHorizontal: 8,
+    fontWeight: '600',
+    minWidth: 25,
+    textAlign: 'center'
   },
 });
 

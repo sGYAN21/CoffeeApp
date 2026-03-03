@@ -14,7 +14,7 @@ import {
     ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { AuthStackParamList } from '../types';
+import { AuthStackParamList } from '../../types/types';
 import { theme } from '../../constants';
 
 const bg_forget = require('../../assets/forgetPassword.png');

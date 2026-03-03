@@ -4,7 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 import { RootState } from '../store/store';
 import { addTofavourite, removeFromfavourite } from '../store/slices/favouriteSlice';
 import { useSnackbar } from '../context/SnackbarContext';
-import { Item } from '../constants';
+import { Item } from '../types/types';
 
 export const useFavouriteActions = () => {
     const dispatch = useDispatch();

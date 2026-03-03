@@ -1,6 +1,6 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Item } from '../../constants';
+import { Item } from '../../types/types';
 
 export type ItemSize = 'small' | 'medium' | 'large';
 
@@ -46,7 +46,7 @@ export const cartSlice = createSlice({
       );
 
       if (existingItem) {
-        existingItem.quantity += 1;
+      existingItem.quantity = item.quantity;
       } else {
         state.items.push({ ...item, selected: true });
       }

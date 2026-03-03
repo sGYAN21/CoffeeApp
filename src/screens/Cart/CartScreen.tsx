@@ -7,22 +7,19 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { RootState } from '../../store/store';
-import { addToCart, decrementQuantity, ItemSize, removeFromCart } from '../../store/slices/cartSlice';
+import { ItemSize, } from '../../store/slices/cartSlice';
 import CartItem from './components/CartCard';
 import { useNavigation } from '@react-navigation/native';
-import { deleteDoc, doc, getFirestore } from '@react-native-firebase/firestore';
-import { useSnackbar } from '../../context/SnackbarContext';
 import { useCartActions } from '../../hooks/useCartActions';
 
 const CartScreen = () => {
-  const dispatch = useDispatch();
-    const { showSnackbar } = useSnackbar();
+
   const navigation = useNavigation<any>();
-   const {  removeItemFromCart, } = useCartActions();
+  const { updateQuantity, removeItemFromCart, } = useCartActions();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const total = useSelector((state: RootState) => state.cart.totalPrice);
 
@@ -30,9 +27,6 @@ const CartScreen = () => {
 
   const handlePress = () => {
     navigation.navigate('PlaceOrder');
-  };
-  const handleDelete = async (itemId: string | number,name:string, type: string, size: ItemSize) => {
-   removeItemFromCart(itemId ,name, type, size);
   };
   const renderEmptyCart = () => (
     <View style={styles.emptyContainer}>
@@ -45,7 +39,7 @@ const CartScreen = () => {
     <SafeAreaProvider style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
       <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
-        
+
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Cart Details</Text>
         </View>
@@ -53,7 +47,7 @@ const CartScreen = () => {
         {cartItems.length > 0 && (
           <View style={styles.topButtonContainer}>
             <TouchableOpacity style={styles.checkoutButton} activeOpacity={0.8}
-         onPress={handlePress}
+              onPress={handlePress}
             >
               <Text style={styles.checkoutText}>
                 Proceed to Buy ({cartItems.length} items)
@@ -69,9 +63,9 @@ const CartScreen = () => {
           renderItem={({ item }) => (
             <CartItem
               item={item}
-              onIncrement={() => dispatch(addToCart(item))}
-              onDecrement={() => dispatch(decrementQuantity({ id: item.id, type: item.type,size: item.selectedSize }))}
-              onRemove={() => handleDelete(item.id,item.name, item.type, item.selectedSize)}
+              onIncrement={() => updateQuantity(item, item.quantity + 1)}
+              onDecrement={() => updateQuantity(item, item.quantity - 1)}
+             onRemove={() => removeItemFromCart(item.id, item.name, item.type, item.selectedSize)}
             />
           )}
           ListEmptyComponent={renderEmptyCart}
@@ -92,20 +86,20 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     alignItems: 'center',
     justifyContent: 'center',
-  
+
   },
   headerTitle: {
-    fontSize: 24, 
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#000'
   },
   topButtonContainer: {
     paddingHorizontal: 20,
     paddingBottom: 10,
-    marginTop: -5, 
+    marginTop: -5,
   },
   checkoutButton: {
-    backgroundColor: '#C67C4E', 
+    backgroundColor: '#C67C4E',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -124,7 +118,7 @@ const styles = StyleSheet.create({
     fontWeight: '700'
   },
   listContent: {
-    paddingTop: 10, 
+    paddingTop: 10,
     paddingBottom: 40,
     paddingHorizontal: 8
   },

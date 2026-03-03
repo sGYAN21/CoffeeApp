@@ -44,7 +44,6 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
                                 [size]: data.volume || 0
                             },
 
-                            // Cart Specific Properties
                             quantity: parseInt(data.quantitiy || "1"),
                             selectedSize: size,
                             selected: true,
@@ -55,7 +54,6 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
                     console.error("Sync Error:", error);
                 }
             } else {
-                // Handle Logout
                 dispatch(setUser(null));
                 dispatch(setCart([]));
             }

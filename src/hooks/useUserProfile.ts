@@ -1,6 +1,15 @@
 import { useState, useEffect } from 'react';
 import firestore from '@react-native-firebase/firestore';
 
+export interface deliveryAddress {
+  id: string;
+  contactName: string;
+  phone: string;
+  pincode: string;
+  place: string;
+  type: string; 
+}
+
 export interface UserProfile {
   uid: string;
   userName: string; 
@@ -9,6 +18,7 @@ export interface UserProfile {
   age?: number;     
   phoneNumber?: string; 
   profileImageUrl?: string | null;
+  deliveryAddress?: deliveryAddress[];
 }
 
 const useUserProfile = (userId: string | undefined) => {
@@ -32,10 +42,10 @@ const useUserProfile = (userId: string | undefined) => {
             userName: data?.userName || '',
             email: data?.email || '',
             gender: data?.gender || 'male',
-            // These will be undefined until you save them for the first time
             age: data?.age,
             phoneNumber: data?.phoneNumber,
             profileImageUrl: data?.profileImageUrl || null,
+            deliveryAddress: data?.deliveryAddress || [],
           });
         }
         setLoading(false);
@@ -62,8 +72,40 @@ const useUserProfile = (userId: string | undefined) => {
       throw err;
     }
   };
+const addAddress = async (newAddress: deliveryAddress) => {
+    if (!userId) return;
 
-  return { userData, loading, updateProfile };
+    const currentAddresses = userData?.deliveryAddress || [];
+    if (currentAddresses.length >= 4) {
+      throw new Error("LIMIT_REACHED");
+    }
+    try {
+      await firestore()
+        .collection('users')
+        .doc(userId)
+        .update({
+          deliveryAddress: firestore.FieldValue.arrayUnion(newAddress)
+        });
+    } catch (err) {
+      console.error("Add Address Error:", err);
+      throw err;
+    }
+  };
+  const deleteAddress = async (addressToDelete: deliveryAddress) => {
+    if (!userId) return;
+    try {
+      await firestore()
+        .collection('users')
+        .doc(userId)
+        .update({
+          deliveryAddress: firestore.FieldValue.arrayRemove(addressToDelete)
+        });
+    } catch (err) {
+      console.error("Delete Address Error:", err);
+      throw err;
+    }
+  };
+  return { userData, loading, updateProfile,addAddress, deleteAddress };
 };
 
 export default useUserProfile;

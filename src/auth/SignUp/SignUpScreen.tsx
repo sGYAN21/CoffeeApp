@@ -13,10 +13,10 @@ import {
 import React, { useState } from 'react';
 import Snackbar from 'react-native-snackbar';
 import Feather from 'react-native-vector-icons/Feather';
-import Icon from 'react-native-vector-icons/Ionicons';
+
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../types';
+import { AuthStackParamList } from '../../types/types';
 import { emailPasswordSignUp } from '../../services/firebase';
 import bg_signup from '../../assets/signup_img.png'
 import { theme } from '../../constants';

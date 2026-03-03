@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,18 +15,19 @@ import {
   StatusBar,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { AuthStackParamList } from '../types';
+import { AuthStackParamList } from '../../types/types';
 import { emailPasswordSignIn } from '../../services/firebase';
 import Snackbar from 'react-native-snackbar';
 import bg_signin from '../../assets/signin_img.png';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import GoogleSignInButton from '../../components/GoogleSignInButton';
 import { theme } from '../../constants';
+import { useSnackbar } from '../../context/SnackbarContext';
 type SigninNavProp = NativeStackNavigationProp<AuthStackParamList, 'signin'>;
 
 const SignInScreen = () => {
   const navigation = useNavigation<SigninNavProp>();
-
+  const {showSnackbar} = useSnackbar();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -43,12 +44,7 @@ const SignInScreen = () => {
     try {
       const res = await emailPasswordSignIn(email, password);
       console.log('Logged in successfully:', res.user.uid);
-      Snackbar.show({
-        text: 'User Sign in successfully 🎉',
-        duration: Snackbar.LENGTH_SHORT,
-        backgroundColor: '#C67C4E',
-        textColor: '#fff',
-      });
+       showSnackbar("Sign in Successfully 🎉");
       navigation.navigate('MainTabs' as any);
     } catch (error: any) {
       console.log(error);

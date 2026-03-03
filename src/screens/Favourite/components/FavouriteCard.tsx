@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
-import { theme, Item } from '../../../constants';
+import {  Item } from '../../../types/types';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useCartActions } from '../../../hooks/useCartActions';

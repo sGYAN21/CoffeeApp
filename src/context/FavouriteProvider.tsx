@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { setFavourite, clearfavourite } from '../store/slices/favouriteSlice';
-import { Item } from '../constants';
+import { Item } from '../types/types';
 
 const FavouriteProvider = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useDispatch();

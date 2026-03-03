@@ -4,7 +4,7 @@ import { getFirestore, doc, setDoc, deleteDoc } from '@react-native-firebase/fir
 import { RootState } from '../store/store';
 import { addToCart, removeFromCart, ItemSize } from '../store/slices/cartSlice';
 import { useSnackbar } from '../context/SnackbarContext';
-import { Item } from '../constants';
+import { Item } from '../types/types';
 
 export const useCartActions = () => {
     const dispatch = useDispatch();
@@ -77,6 +77,39 @@ export const useCartActions = () => {
             setIsSyncing(false);
         }
     };
+    const updateQuantity = async (item: any, newQuantity: number) => {
+        if (!userId || isSyncing) return;
 
-    return { addItemToCart, removeItemFromCart, isSyncing };
+        if (newQuantity <= 0) {
+            // Automatically remove if quantity drops to 0
+            return removeItemFromCart(item.id, item.name, item.type, item.selectedSize);
+        }
+
+        const cartDocId = `${userId}_${item.id}_${item.selectedSize}`;
+        const cartRef = doc(getFirestore(), 'carts', cartDocId);
+
+        try {
+            setIsSyncing(true);
+            
+            // We use merge: true so we only update the quantity field
+            await setDoc(cartRef, { 
+                quantitiy: newQuantity.toString(),
+                updatedAt: new Date().toISOString() 
+            }, { merge: true });
+
+            // Sync Redux
+            dispatch(addToCart({
+                ...item,
+                quantity: newQuantity,
+            }));
+
+        } catch (error) {
+            console.error("Update quantity error:", error);
+            showSnackbar("Failed to update quantity");
+        } finally {
+            setIsSyncing(false);
+        }
+    };
+
+    return { addItemToCart, removeItemFromCart,updateQuantity, isSyncing };
 };

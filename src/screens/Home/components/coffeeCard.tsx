@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Item } from '../../../constants';
+import { Item } from '../../../types/types';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { ItemSize } from '../../../store/slices/cartSlice';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -14,10 +14,15 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import man from '../../assets/icons/man.png'
-import woman from '../../assets/icons/woman.png'
 import { SignOut } from '../../services/firebase';
 import { theme } from '../../constants';
+
+import auth from '@react-native-firebase/auth';
+import EditProfileDrawer from './components/BottomSheet';
+import useUserProfile from '../../hooks/useUserProfile';
+import { useSnackbar } from '../../context/SnackbarContext';
+import AvatarDialog from './components/AvatarDialog';
+
 const ProfileItem = ({ icon, label, showBorder = true }: { icon: string, label: string, showBorder?: boolean }) => (
     <TouchableOpacity style={[styles.menuItem, showBorder && styles.borderBottom]}>
         <View style={styles.menuItemContent}>
@@ -30,9 +35,37 @@ const ProfileItem = ({ icon, label, showBorder = true }: { icon: string, label: 
 
 const ProfileScreen = () => {
     const navigation = useNavigation<any>();
+    const { showSnackbar } = useSnackbar();
+    const userId = auth().currentUser?.uid;
+    const [isAvatarModalVisible, setAvatarModalVisible] = useState(false);
+
+    const handleAvatarSave = async (imageUrl: string) => {
+        try {
+            await updateProfile({ ...userData, profileImageUrl: imageUrl });
+            setAvatarModalVisible(false);
+            showSnackbar("Avatar Updated!");
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    const [isEditVisible, setEditVisible] = useState(false);
+    const { userData, loading, updateProfile } = useUserProfile(userId);
+
+
+    const handleSave = async (newData: any) => {
+        try {
+            await updateProfile(newData);
+            setEditVisible(false);
+        } catch (error) {
+            console.error("Failed to save:", error);
+        }
+    };
+
+    if (loading) return null;
     const handleLogout = async () => {
         try {
             await SignOut();
+            showSnackbar("Sign Out Successfully ");
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'signin' }],
@@ -64,59 +97,80 @@ const ProfileScreen = () => {
 
                         {/* Avatar Section */}
                         <View style={styles.avatarContainer}>
-                            <View style={styles.avatarWrapper}>
-                                <FontAwesome name="user" size={70} color="#fff" />
-                                <TouchableOpacity style={styles.cameraBadge}>
+                            <TouchableOpacity
+                                style={styles.avatarWrapper}
+                                onPress={() => setAvatarModalVisible(true)}
+                            >
+                                {userData?.profileImageUrl ? (
+                                    <Image source={{ uri: userData.profileImageUrl }} style={{ width: 110, height: 110, borderRadius: 55 }} />
+                                ) : (
+                                
+                                        <Text style={styles.fallbackText}>
+                                            {userData?.userName ? userData.userName.charAt(0).toUpperCase() : '?'}
+                                        </Text>
+                                )}
+                                <View style={styles.cameraBadge}>
                                     <MaterialIcons name="photo-camera" size={18} color="#fff" />
-                                </TouchableOpacity>
-                            </View>
+                                </View>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={styles.userInfo}>
                             <View style={styles.userInfoSection}>
-                                <Text style={styles.userName}>NAME</Text>
+                                <Text style={styles.userName}>{userData?.userName || 'Add name'}</Text>
                                 <View style={styles.detailRow}>
                                     <Text style={styles.detailLabel}>Age </Text>
-                                    <Text style={styles.ageValue}>27</Text>
+                                    <Text style={styles.ageValue}>{userData?.age || ''}</Text>
                                 </View>
                             </View>
 
-                            <TouchableOpacity style={styles.editButton}>
+                            <TouchableOpacity style={styles.editButton}
+                                onPress={() => setEditVisible(true)}
+                            >
                                 <MaterialIcons name="edit" size={26} color="#333" />
                             </TouchableOpacity>
                         </View>
 
-                        {/* Gender Selection */}
                         <View style={styles.genderRow}>
-                            <TouchableOpacity style={styles.genderCircleActive}>
-                                <Image source={man} style={{ width: 40, height: 40 }} resizeMode='contain' />
-                                {/* <MaterialCommunityIcons name="gender-male" size={20} color="#fff" /> */}
+                            {/* Male Icon */}
+                            <TouchableOpacity
+                                style={userData?.gender === 'male' ? styles.genderCircleActive : styles.genderCircleInactive}
+                                disabled={true}
+                            >
+                                <MaterialCommunityIcons
+                                    name="face-man"
+                                    size={32}
+                                    color={userData?.gender === 'male' ? '#D17842' : '#BDBDBD'}
+                                />
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.genderCircleInactive}>
-                                <Image source={woman} style={{ width: 40, height: 40 }} resizeMode='contain' />
+
+                            {/* Female Icon */}
+                            <TouchableOpacity
+                                style={userData?.gender === 'female' ? styles.genderCircleActive : styles.genderCircleInactive}
+                                disabled={true}
+                            >
+                                <MaterialCommunityIcons
+                                    name="face-woman"
+                                    size={32}
+                                    color={userData?.gender === 'female' ? '#D17842' : '#BDBDBD'}
+                                />
                             </TouchableOpacity>
                         </View>
-
                         {/* Contact Section */}
                         <View style={styles.contactRow}>
                             <MaterialIcons name="smartphone" size={28} color="#333" />
-                            <Text style={styles.phoneNumber}>+02 123 4567 8910</Text>
-                            <TouchableOpacity>
-                                <MaterialCommunityIcons name="whatsapp" size={32} color="#7FB04B" />
-                            </TouchableOpacity>
+                            <Text style={styles.phoneNumber}>+91{' '}{userData?.phoneNumber || 'Add phone number'}</Text>
                         </View>
 
                         {/* Menu List Section */}
                         <View style={styles.menuSection}>
-                            <Text style={styles.sectionTitle}>Coffee delivery</Text>
+                            <Text style={styles.sectionTitle}>Drink delivery</Text>
 
                             <View style={styles.menuCard}>
                                 <ProfileItem icon="basket-outline" label="Your orders" />
                                 <ProfileItem icon="book-outline" label="Address book" />
                                 <ProfileItem icon="bookmark-outline" label="Your collections" />
-                                <ProfileItem icon="train-variant" label="Order on train" />
                                 <ProfileItem icon="help-circle-outline" label="Online ordering help" />
-
                                 <ProfileItem icon="store-outline" label="Hear from Cafe" showBorder={false} />
                             </View>
                         </View>
@@ -124,6 +178,20 @@ const ProfileScreen = () => {
                     </View>
                 </ScrollView>
             </SafeAreaView>
+            {userData && (
+                <EditProfileDrawer
+                    isVisible={isEditVisible}
+                    onClose={() => setEditVisible(false)}
+                    currentData={userData}
+                    onSave={handleSave}
+                />
+            )}
+            <AvatarDialog
+                isVisible={isAvatarModalVisible}
+                onClose={() => setAvatarModalVisible(false)}
+                onSave={handleAvatarSave}
+            // currentAvatar={userData?.profileImageUrl || null}
+            />
         </SafeAreaProvider>
     );
 };
@@ -154,6 +222,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'rgba(0,0,0,0.3)',
+    },
+  
+    fallbackText: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#FFFFFF',
+        fontSize: 40,
+        fontWeight: 'semibold',
     },
     signoutBtn: {
         marginRight: 25,
@@ -265,7 +341,7 @@ const styles = StyleSheet.create({
         color: '#424242',
         marginLeft: 10,
         flex: 1,
-        fontWeight: '500',
+        fontWeight: '400',
     },
     menuSection: {
         marginTop: 10,
