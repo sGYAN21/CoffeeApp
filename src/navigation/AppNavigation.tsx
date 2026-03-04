@@ -1,9 +1,9 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/Home/HomeScreen';
-import { Item,  } from '../types/types';
-import {theme} from '../constants'
+import { Item, } from '../types/types';
+import { theme } from '../constants'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -18,6 +18,7 @@ import FavouriteScreen from '../screens/Favourite/FavouriteScreen';
 import CartScreen from '../screens/Cart/CartScreen';
 import GetStartedScreen from '../screens/GetStarted/GetStartedScreen';
 import PlaceOrderScreen from '../screens/PlaceOrder/PlaceOrderScreen';
+import SuccessScreen from '../screens/SuccessScreen/SuccessScreen';
 
 
 export type RootStackParamList = {
@@ -29,22 +30,30 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 export default function AppNavigation() {
+  const navTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: '#F9F9F9',
+    },
+  };
   return (
     <View style={{ flex: 1 }}>
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-           <Stack.Screen name="splashScreen" component={SplashScreen} />
-         <Stack.Screen name="signin" component={SignInScreen} />
-         <Stack.Screen name="signup" component={SignupScreen} />
-         <Stack.Screen name="getstarted" component={GetStartedScreen} />
-         <Stack.Screen name="forgetpassword" component={ForgetPassword} />
-         {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
-        <Stack.Screen name="MainTabs" component={HomeTabs} />
-        <Stack.Screen name="ProductDetails" component={ProductScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="PlaceOrder" component={PlaceOrderScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer theme={navTheme}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="splashScreen" component={SplashScreen} />
+          <Stack.Screen name="signin" component={SignInScreen} />
+          <Stack.Screen name="signup" component={SignupScreen} />
+          <Stack.Screen name="getstarted" component={GetStartedScreen} />
+          <Stack.Screen name="forgetpassword" component={ForgetPassword} />
+          {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
+          <Stack.Screen name="MainTabs" component={HomeTabs} />
+          <Stack.Screen name="ProductDetails" component={ProductScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="PlaceOrder" component={PlaceOrderScreen} />
+          <Stack.Screen name="SuccessScreen" component={SuccessScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </View>
   );
 }

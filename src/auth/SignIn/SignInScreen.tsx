@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { use, useState } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import {
   StyleSheet,
   Text,
@@ -9,7 +10,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
-  KeyboardAvoidingView,
   ScrollView,
   Platform,
   StatusBar,
@@ -27,7 +27,7 @@ type SigninNavProp = NativeStackNavigationProp<AuthStackParamList, 'signin'>;
 
 const SignInScreen = () => {
   const navigation = useNavigation<SigninNavProp>();
-  const {showSnackbar} = useSnackbar();
+  const { showSnackbar } = useSnackbar();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ const SignInScreen = () => {
     try {
       const res = await emailPasswordSignIn(email, password);
       console.log('Logged in successfully:', res.user.uid);
-       showSnackbar("Sign in Successfully 🎉");
+      showSnackbar("Sign in Successfully 🎉");
       navigation.navigate('MainTabs' as any);
     } catch (error: any) {
       console.log(error);
@@ -54,110 +54,105 @@ const SignInScreen = () => {
   };
 
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          style={styles.container}
-        >
-          <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            keyboardShouldPersistTaps="handled"
-          >
-            <View style={styles.header}>
-              <Image
-                source={bg_signin}
-                style={{ width: 240, height: 250 }}
-                resizeMode="contain"
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1, }}
+        showsVerticalScrollIndicator={false}
+      >
+
+        <View style={styles.header}>
+          <Image
+            source={bg_signin}
+            style={{ width: 240, height: 250 }}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={styles.card}>
+          <View style={styles.content}>
+            <Text style={styles.title}>Hello, Coffee Paglu</Text>
+
+            {/* Email Input */}
+            <View style={styles.inputContainer}>
+              <Icon
+                name="mail-outline"
+                size={20}
+                color="#666"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
               />
             </View>
-            <View style={styles.card}>
-              <View style={styles.content}>
-                <Text style={styles.title}>Hello, Coffee Paglu</Text>
 
-                {/* Email Input */}
-                <View style={styles.inputContainer}>
-                  <Icon
-                    name="mail-outline"
-                    size={20}
-                    color="#666"
-                    style={styles.icon}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                  />
-                </View>
-
-                {/* Password Input */}
-                <View style={styles.inputContainer}>
-                  <Icon
-                    name="lock-closed-outline"
-                    size={20}
-                    color="#666"
-                    style={styles.icon}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry={!isPassVisible}
-                  />
-                  <TouchableOpacity
-                    onPress={() => setIsPassVisible(!isPassVisible)}
-                  >
-                    <Icon
-                      name={isPassVisible ? 'eye-outline' : 'eye-off-outline'}
-                      size={20}
-                      color="#666"
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('forgetpassword' as any)}
-                >
-                  <Text style={styles.forgotText}>Forgot Password?</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.loginButton}
-                  onPress={handleSignin}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <ActivityIndicator color="#fff" />
-                  ) : (
-                    <Text style={styles.loginButtonText}>Sign In</Text>
-                  )}
-                </TouchableOpacity>
-
-                <View style={styles.dividerContainer}>
-                  <View style={styles.divider} />
-                  <Text style={styles.dividerText}>OR</Text>
-                  <View style={styles.divider} />
-                </View>
-
-                <GoogleSignInButton />
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('getstarted' as any)}
-                >
-                  <Text style={styles.switchText}>
-                    Don't have an account?{' '}
-                    <Text style={styles.linkText}>Sign Up</Text>
-                  </Text>
-                </TouchableOpacity>
-              </View>
+            {/* Password Input */}
+            <View style={styles.inputContainer}>
+              <Icon
+                name="lock-closed-outline"
+                size={20}
+                color="#666"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!isPassVisible}
+              />
+              <TouchableOpacity
+                onPress={() => setIsPassVisible(!isPassVisible)}
+              >
+                <Icon
+                  name={isPassVisible ? 'eye-outline' : 'eye-off-outline'}
+                  size={20}
+                  color="#666"
+                />
+              </TouchableOpacity>
             </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    </SafeAreaProvider>
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate('forgetpassword' as any)}
+            >
+              <Text style={styles.forgotText}>Forgot Password?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={handleSignin}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.loginButtonText}>Sign In</Text>
+              )}
+            </TouchableOpacity>
+
+            <View style={styles.dividerContainer}>
+              <View style={styles.divider} />
+              <Text style={styles.dividerText}>OR</Text>
+              <View style={styles.divider} />
+            </View>
+
+            <GoogleSignInButton />
+            <TouchableOpacity
+              onPress={() => navigation.navigate('getstarted' as any)}
+            >
+              <Text style={styles.switchText}>
+                Don't have an account?{' '}
+                <Text style={styles.linkText}>Sign Up</Text>
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -166,6 +161,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.primary,
   },
+
   header: {
     justifyContent: 'center',
     alignItems: 'center',

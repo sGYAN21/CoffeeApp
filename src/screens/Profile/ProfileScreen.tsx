@@ -78,6 +78,7 @@ const ProfileScreen = () => {
         <SafeAreaProvider>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
             <SafeAreaView style={styles.container} edges={['top']}>
+                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '50%', backgroundColor: theme.primary }} />
                 <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
                     <View style={styles.headerBackground}>
@@ -104,10 +105,10 @@ const ProfileScreen = () => {
                                 {userData?.profileImageUrl ? (
                                     <Image source={{ uri: userData.profileImageUrl }} style={{ width: 110, height: 110, borderRadius: 55 }} />
                                 ) : (
-                                
-                                        <Text style={styles.fallbackText}>
-                                            {userData?.userName ? userData.userName.charAt(0).toUpperCase() : '?'}
-                                        </Text>
+
+                                    <Text style={styles.fallbackText}>
+                                        {userData?.userName ? userData.userName.charAt(0).toUpperCase() : '?'}
+                                    </Text>
                                 )}
                                 <View style={styles.cameraBadge}>
                                     <MaterialIcons name="photo-camera" size={18} color="#fff" />
@@ -199,7 +200,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.primary,
+        backgroundColor: '#fff',
     },
     scrollContent: {
         flexGrow: 1,
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgba(0,0,0,0.3)',
     },
-  
+
     fallbackText: {
         justifyContent: 'center',
         alignItems: 'center',

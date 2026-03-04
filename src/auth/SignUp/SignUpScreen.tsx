@@ -20,6 +20,8 @@ import { AuthStackParamList } from '../../types/types';
 import { emailPasswordSignUp } from '../../services/firebase';
 import bg_signup from '../../assets/signup_img.png'
 import { theme } from '../../constants';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { SafeAreaView } from 'react-native-safe-area-context';
 type SignupNavProp = NativeStackNavigationProp<AuthStackParamList, 'signup'>;
 
 const SignupScreen = () => {
@@ -52,14 +54,13 @@ const SignupScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1, }}
+        showsVerticalScrollIndicator={false}
       >
+
         <View style={styles.container}>
           <View style={styles.header}>
             <Image
@@ -132,8 +133,8 @@ const SignupScreen = () => {
             </View>
           </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 };
 

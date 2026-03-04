@@ -16,6 +16,8 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { AuthStackParamList } from '../../types/types';
 import { theme } from '../../constants';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const bg_forget = require('../../assets/forgetPassword.png');
 
@@ -95,11 +97,13 @@ const ForgetPassword = () => {
     };
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            style={styles.container}
-        >
-            <ScrollView contentContainerStyle={{ flexGrow: 1 ,}} keyboardShouldPersistTaps="handled">
+        <SafeAreaView style={styles.container} edges={['top']}>
+            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '50%', backgroundColor: theme.primary }} />
+            <KeyboardAwareScrollView
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{ flexGrow: 1, }}
+                showsVerticalScrollIndicator={false}
+            >
                 <View style={styles.header}>
                     <Image source={bg_forget} style={styles.headerImage} />
                 </View>
@@ -206,15 +210,15 @@ const ForgetPassword = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+            </ KeyboardAwareScrollView>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.primary
+        backgroundColor: '#fff'
     },
     header: {
         alignItems: 'center',
@@ -231,10 +235,10 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         paddingHorizontal: 25,
-        flex:1,
-        minHeight: '100%', 
+        flex: 1,
+        minHeight: '100%',
         paddingBottom: 40,
-          alignItems: 'stretch',
+        alignItems: 'stretch',
     },
     title: {
         fontSize: 25,
@@ -244,8 +248,9 @@ const styles = StyleSheet.create({
         color: '#333'
 
     },
-    content: { marginTop: 40, 
-          
+    content: {
+        marginTop: 40,
+
     },
     inputContainer: {
         flexDirection: 'row',

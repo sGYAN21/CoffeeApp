@@ -1,14 +1,20 @@
 import React from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-} from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 
 const ReviewItemCard = ({ item }: any) => {
-    const displaySize = item.size || item.selectedSize || (item.prices && item.prices[0]?.size);
-    const displayPrice = Number(item.price) || 0;
+
+    const selectedSize = item.selectedSize || item.size || 'small';
+
+    const rawPrice = typeof item.price === 'object' && item.price !== null 
+        ? item.price[selectedSize] 
+        : item.price;
+
+    const unitPrice = typeof rawPrice === 'string' 
+        ? parseFloat(rawPrice.replace(/[^0-9.-]+/g, "")) 
+        : Number(rawPrice) || 0;
+
+    const quantity = item.quantity || 1;
+    const totalDisplayPrice = (unitPrice * quantity).toFixed(2);
 
     return (
         <View style={styles.card}>
@@ -18,22 +24,21 @@ const ReviewItemCard = ({ item }: any) => {
                     style={styles.prodImg}
                 />
                 <View style={styles.quantityBadge}>
-                    <Text style={styles.quantityText}>x{item.quantity || 1}</Text>
+                    <Text style={styles.quantityText}>x{quantity}</Text>
                 </View>
             </View>
             
             <View style={styles.infoContainer}>
                 <Text style={styles.prodTitle} numberOfLines={1}>{item.name}</Text>
                 
-                {/* Fixed Size Display */}
-                {displaySize ? (
-                    <Text style={styles.sizeText}>Size: {displaySize}</Text>
-                ) : null}
+                <Text style={styles.sizeText}>
+                    Size: {selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1)}
+                </Text>
 
                 <View style={styles.priceRow}>
                     <Text style={styles.priceText}>
                         <Text style={styles.currency}>$ </Text>
-                        {(displayPrice * (item.quantity || 1)).toFixed(2)}
+                        {totalDisplayPrice}
                     </Text>
                 </View>
             </View>

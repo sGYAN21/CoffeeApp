@@ -18,7 +18,9 @@ const CartCard: React.FC<CartCardProps> = ({ item, onIncrement, onDecrement, onR
   const navigation = useNavigation<any>();
 
   const displayPrice = item.price[item.selectedSize];
-  const displayVolume = item.volume[item.selectedSize];
+ const displayVolume = typeof item.volume === 'object' 
+  ? item.volume[item.selectedSize] 
+  : item.volume;
 
   // Calculate total for this specific row (price * quantity)
   const lineTotal = (Number(displayPrice) * item.quantity).toFixed(2);
@@ -55,7 +57,7 @@ const CartCard: React.FC<CartCardProps> = ({ item, onIncrement, onDecrement, onR
               <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
               {/* Show specific size and volume for this selected item */}
               <Text style={styles.itemType}>
-                {item.selectedSize.charAt(0).toUpperCase() + item.selectedSize.slice(1)} | {displayVolume} ml
+                {item.selectedSize.charAt(0).toUpperCase() + item.selectedSize.slice(1)} | {displayVolume || '--'} ml
               </Text>
             </View>
             <TouchableOpacity onPress={toggleCheckbox} style={styles.checkIcon}>

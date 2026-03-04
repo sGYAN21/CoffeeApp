@@ -9,7 +9,8 @@ import {
   Dimensions,
   ImageBackground,
   StatusBar,
-  ActivityIndicator
+  ActivityIndicator,
+  TextInput
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { theme, } from '../../constants/index';
@@ -45,7 +46,13 @@ const HomeScreen: React.FC = () => {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
+  const homeAddress = useMemo(() => {
+    if (!userData?.deliveryAddress) return 'Add Address';
 
+    const home = userData.deliveryAddress.find(addr => addr.type === 'Home');
+
+    return home ? home.pincode : 'No Home Address';
+  }, [userData?.deliveryAddress]);
   useEffect(() => {
     const loadInitialCategories = async () => {
       const cats = await productCategories();
@@ -108,8 +115,8 @@ const HomeScreen: React.FC = () => {
             </TouchableOpacity>
 
             <View style={styles.locationContainer}>
-              <Icon name="location" size={18} color={theme.secondary} />
-              <Text style={styles.locationText}>New York, NYC</Text>
+              <Icon name="location" size={22} color={theme.secondary} />
+              <Text style={styles.locationText}>{homeAddress}</Text>
             </View>
 
             <TouchableOpacity>
@@ -119,7 +126,11 @@ const HomeScreen: React.FC = () => {
 
           <View style={styles.searchSection}>
             <View style={styles.searchBar}>
-              <Text style={styles.searchText}>Search</Text>
+              <TextInput
+                placeholder="Search your drink..."
+                placeholderTextColor="#999"
+                style={styles.searchInput}
+              />
               <View style={styles.searchIconBg}>
                 <Icon name="search" size={18} color="white" />
               </View>
@@ -246,6 +257,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   locationText: {
+    alignItems: 'center',
+    justifyContent: 'center',
     fontWeight: 'bold',
     marginLeft: 5,
     fontSize: 16,
@@ -259,12 +272,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#F3F3F3',
     borderRadius: 30,
-    padding: 6,
+    padding: 4,
     paddingLeft: 20,
     alignItems: 'center',
     justifyContent: 'space-between',
     elevation: 3,
   },
+  searchInput: {
+  flex: 1,
+  height: 40,
+  color: '#000',
+  fontSize: 16,
+},
   searchText: {
     color: '#999',
     fontSize: 16

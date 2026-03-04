@@ -32,6 +32,7 @@ export const useCartActions = () => {
                 name: item.name,
                 image: typeof item.image === 'string' ? item.image : "",
                 price: currentPrice,
+                volume: item.volume[size],
                 quantitiy: quantity.toString(), // Kept spelling for your DB consistency
                 size: size,
                 type: item.type,

@@ -20,11 +20,24 @@ const initialState: CartState = {
   totalPrice: 0,
 };
 
+const getNumericValue = (item: CartItem, key: 'price' | 'volume'): number => {
+  const data = item[key];
+  const size = item.selectedSize;
+
+  const rawValue = (typeof data === 'object' && data !== null) ? data[size] : data;
+  
+  const cleanValue = typeof rawValue === 'string' 
+    ? parseFloat(rawValue.replace(/[^0-9.-]+/g, "")) 
+    : Number(rawValue);
+
+  return isNaN(cleanValue) ? 0 : cleanValue;
+};
+
 const calculateTotal = (items: CartItem[]) => {
   return items
     .filter(item => item.selected)
     .reduce((total, item) => {
-      const price = Number(item.price[item.selectedSize]);
+      const price = getNumericValue(item, 'price');
       return total + price * item.quantity;
     }, 0);
 };

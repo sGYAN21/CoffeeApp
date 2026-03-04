@@ -25,6 +25,7 @@ import useUserProfile from '../../hooks/useUserProfile';
 
 const PlaceOrderScreen = ({ navigation }: any) => {
    const { placeBatchOrder, loading } = usePlaceOrder();
+   
     const user = auth().currentUser;
  
     const {
@@ -75,7 +76,7 @@ const PlaceOrderScreen = ({ navigation }: any) => {
         const result = await placeBatchOrder(cartItems, commonData);
 
         if (result.success) {
-            navigation.navigate('OrderSuccess', { txnId: result.transactionId });
+            navigation.navigate('SuccessScreen', { txnId: result.transactionId });
         } else {
             Alert.alert("Order Failed", "Something went wrong. Please try again.");
         }
