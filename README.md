@@ -200,7 +200,10 @@ Central place for user identity
 
 Secure session control
 
-📸 Screenshot  <img src="screenshots/Profile.png" width="30%" />
+📸 Screenshot  
+
+<img src="screenshots/Profile.png" width="30%" />
+
 🛠️ Tech Stack
 
 Framework: React Native (CLI)
