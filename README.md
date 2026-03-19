@@ -200,9 +200,7 @@ Central place for user identity
 
 Secure session control
 
-📸 Screenshot
-
-<img src="screenshots/Profile.png" width="30%" />
+📸 Screenshot  <img src="screenshots/Profile.png" width="30%" />
 🛠️ Tech Stack
 
 Framework: React Native (CLI)
@@ -228,18 +226,5 @@ Secure session handling
 Auth-based navigation (Login → Home)
 
 Password reset via email
-
-📸 Screenshots Directory Structure
-screenshots/
-│── welcomeScreen.png
-│── signin.png
-│── signup.png
-│── forgetpassword.png
-│── HomePage.png
-│── DetailPage.png
-│── Cart.png
-│── Favourite.png
-│── Profile.png
-✨ Summary
 
 Coffee Paglu delivers a smooth, premium coffee-ordering experience with secure authentication, elegant UI, and intuitive navigation — perfect for modern mobile users ☕🚀
